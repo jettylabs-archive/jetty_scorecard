@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jetty Scorecard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+    <link href="https://uploads-ssl.webflow.com/62ec140632aa51725eb19c55/62f5611287ee5b8d0338f991_favicon32.ico"
+        rel="shortcut icon" type="image/x-icon" />
+    <link href="https://uploads-ssl.webflow.com/62ec140632aa51725eb19c55/62f5611604e067109ede6974_logo256.png"
+        rel="apple-touch-icon" />
+    <style type="text/css">
+        .overall-grade {
+            border-radius: 15px;
+            border-style: solid;
+            border-color: black;
+            min-width: 175px;
+            min-height: 175px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 6.5em;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 10px;
+            margin: 10px;
+        }
+
+        .detail-icon-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .accordion-button:not(.collapsed) {
+            color: #5a321b;
+            background-color: #f4702426;
+        }
+
+        .accordion-button:focus {
+            border-color: #f47024;
+        }
+    </style>
+
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+        <symbol id="check-circle-fill" fill="green" viewBox="0 0 16 16">
+            <path
+                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+        </symbol>
+        <symbol id="info-fill" fill="skyblue" viewBox="0 0 16 16">
+            <path
+                d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+        </symbol>
+        <symbol id="exclamation-triangle-fill" fill="red" viewBox="0 0 16 16">
+            <path
+                d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+        </symbol>
+        <symbol id="lightbulb-fill" fill="#f47124" viewBox="0 0 16 16">
+            <path
+                d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5z" />
+        </symbol>
+        <symbol id="question-diamond-fill" fill="gray" viewBox="0 0 16 16">
+            <path
+                d="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098L9.05.435zM5.495 6.033a.237.237 0 0 1-.24-.247C5.35 4.091 6.737 3.5 8.005 3.5c1.396 0 2.672.73 2.672 2.24 0 1.08-.635 1.594-1.244 2.057-.737.559-1.01.768-1.01 1.486v.105a.25.25 0 0 1-.25.25h-.81a.25.25 0 0 1-.25-.246l-.004-.217c-.038-.927.495-1.498 1.168-1.987.59-.444.965-.736.965-1.371 0-.825-.628-1.168-1.314-1.168-.803 0-1.253.478-1.342 1.134-.018.137-.128.25-.266.25h-.825zm2.325 6.443c-.584 0-1.009-.394-1.009-.927 0-.552.425-.94 1.01-.94.609 0 1.028.388 1.028.94 0 .533-.42.927-1.029.927z" />
+        </symbol>
+        <symbol id="exclamation-diamond-fill" fill="goldenrod" viewBox="0 0 16 16">
+            <path
+                d="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098L9.05.435zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+        </symbol>
+
+        <symbol viewBox="0 0 65.836288 104.65046" version="1.1" id="jetty-logo" xmlns="http://www.w3.org/2000/svg"
+            xmlns:svg="http://www.w3.org/2000/svg">
+            <defs id="defs2" />
+            <g id="layer1" transform="translate(-28.247888,-64.940222)">
+                <path id="text1839" style="
+                            font-style: normal;
+                            font-variant: normal;
+                            font-weight: bold;
+                            font-stretch: normal;
+                            font-size: 143.745px;
+                            font-family: sans-serif;
+                            font-variant-ligatures: normal;
+                            font-variant-caps: normal;
+                            font-variant-numeric: normal;
+                            font-variant-east-asian: normal;
+                            fill: #f47124;
+                            fill-opacity: 1;
+                            stroke-width: 0.748671;
+                        "
+                    d="M 92.818624,64.940222 V 83.138595 H 91.393905 V 105.19616 H 89.830176 V 74.412512 H 88.534648 V 117.22024 H 87.040682 V 68.219092 H 85.829903 V 95.420015 H 84.335937 V 68.266634 H 83.173735 V 130.92689 H 81.610006 V 85.014966 H 80.324813 V 107.07253 H 78.761084 V 76.2894 H 77.36582 v 42.80772 H 75.97159 V 89.675146 H 74.606299 V 71.905172 h -1.227832 v 59.503348 c 0,8.32896 -0.959391,13.82694 -2.877861,16.49408 -1.918469,2.62035 -5.193871,3.93051 -9.826273,3.93051 -4.585611,0 -8.001424,-1.84832 -10.247437,-5.54488 -1.497342,-2.43318 -2.362781,-6.59751 -2.596741,-12.4933 l -19.582267,2.24586 c 0.04679,10.99611 2.807525,19.34877 8.282182,25.05739 5.474657,5.66182 13.288645,8.4925 23.442497,8.4925 8.656509,0 15.628546,-1.80134 20.916036,-5.40432 5.287489,-3.64977 8.937149,-8.4697 10.949202,-14.45907 1.497342,-4.58561 2.246375,-11.13641 2.246375,-19.65254 V 64.940222 Z" />
+            </g>
+        </symbol>
+    </svg>
+</head>
+
+<body>
+    <nav class="navbar navbar-light bg-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex" href="https://www.get-jetty.com">
+                <svg height="72" width="72" role="img" aria-label="Jetty Labs">
+                    <use xlink:href="#jetty-logo" />
+                </svg>
+                <h1 class="display-5 px-4">Jetty Scorecard</h1>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="d-flex flex-row my-5 align-items-center">
+            <div class="overall-grade" style="background-color: {{ grade_color }};">{{ grade }}</div>
+            <div class="row flex-fill px-4 row-cols-1 row-cols-md-2">
+                <div class="col">
+                    <div class="detail-icon-info">
+                        <svg class="bi flex-shrink-0 me-2" width="36" height="36" role="img" aria-label="Fail:">
+                            <use xlink:href="#exclamation-triangle-fill" />
+                        </svg>
+                        <div class="my-2 display-6">{{ fail_count }} failing {% if fail_count == 1 -%}
+                            check
+                            {%- else -%}
+                            checks
+                            {%- endif %}</div>
+                    </div>
+                    <div class="detail-icon-info">
+                        <svg class="bi flex-shrink-0 me-2" width="36" height="36" role="img" aria-label="Warn:">
+                            <use xlink:href="#exclamation-diamond-fill" />
+                        </svg>
+                        <div class="my-2 display-6">{{ warn_count }} {% if warn_count == 1 -%}
+                            warning
+                            {%- else -%}
+                            warnings
+                            {%- endif %}</div>
+                    </div>
+                    <div class="detail-icon-info">
+                        <svg class="bi flex-shrink-0 me-2" width="36" height="36" role="img" aria-label="Pass:">
+                            <use xlink:href="#check-circle-fill" />
+                        </svg>
+                        <div class="my-2 display-6">{{ pass_count }} passing {% if pass_count == 1 -%}
+                            check
+                            {%- else -%}
+                            checks
+                            {%- endif %}</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="detail-icon-info">
+                        <svg class="bi flex-shrink-0 me-2" width="36" height="36" role="img" aria-label="Ideas:">
+                            <use xlink:href="#info-fill" />
+                        </svg>
+                        <div class="my-2 display-6">{{ idea_count }} ideas</div>
+                    </div>
+                    <div class="detail-icon-info">
+                        <svg class="bi flex-shrink-0 me-2" width="36" height="36" role="img" aria-label="Insights:">
+                            <use xlink:href="#lightbulb-fill" />
+                        </svg>
+                        <div class="my-2 display-6">{{ insight_count }} insights</div>
+                    </div>
+                    <div class="detail-icon-info">
+                        <svg class="bi flex-shrink-0 me-2" width="36" height="36" role="img" aria-label="Not Run:">
+                            <use xlink:href="#question-diamond-fill" />
+                        </svg>
+                        <div class="my-2 display-6">{{ unknown_count }} {% if unknown_count == 1 -%}
+                            check
+                            {%- else -%}
+                            checks
+                            {%- endif %} not run</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-xxl-2 g-4">
+            {% for check in checks %}
+            {{ check }}
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

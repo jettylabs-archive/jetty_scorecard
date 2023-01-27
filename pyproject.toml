@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "jetty_scorecard"
+version = "0.1.0"
+description = ""
+authors = ["Isaac Hales <isaac.hales@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "jetty_scorecard" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+snowflake-connector-python = "^2.9.0"
+pandas = "^1.5.3"
+tqdm = "^4.64.1"
+jinja2 = "^3.1.2"
+inquirerpy = "^0.3.4"
+
+[tool.poetry.scripts]
+jetty_scorecard = 'jetty_scorecard:run'
+
+[tool.poetry.group.dev.dependencies]
+black = { version = "^23.1a1", allow-prereleases = true }
+ipykernel = "^6.20.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
