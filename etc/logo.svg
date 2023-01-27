@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="65.836288mm"
+   height="104.65046mm"
+   viewBox="0 0 65.836288 104.65046"
+   version="1.1"
+   id="svg5"
+   inkscape:export-filename="logo/jetty-orange-big-clear.png"
+   inkscape:export-xdpi="308.64438"
+   inkscape:export-ydpi="308.64438"
+   inkscape:version="1.2 (dc2aeda, 2022-05-15)"
+   sodipodi:docname="logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="false"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:lockguides="true"
+     inkscape:zoom="2.406165"
+     inkscape:cx="144.00509"
+     inkscape:cy="38.858516"
+     inkscape:window-width="1440"
+     inkscape:window-height="847"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1"
+     shape-rendering="crispEdges" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-28.247888,-64.940222)">
+    <path
+       id="text1839"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:143.745px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#f47124;fill-opacity:1;stroke-width:0.748671"
+       d="M 92.818624,64.940222 V 83.138595 H 91.393905 V 105.19616 H 89.830176 V 74.412512 H 88.534648 V 117.22024 H 87.040682 V 68.219092 H 85.829903 V 95.420015 H 84.335937 V 68.266634 H 83.173735 V 130.92689 H 81.610006 V 85.014966 H 80.324813 V 107.07253 H 78.761084 V 76.2894 H 77.36582 v 42.80772 H 75.97159 V 89.675146 H 74.606299 V 71.905172 h -1.227832 v 59.503348 c 0,8.32896 -0.959391,13.82694 -2.877861,16.49408 -1.918469,2.62035 -5.193871,3.93051 -9.826273,3.93051 -4.585611,0 -8.001424,-1.84832 -10.247437,-5.54488 -1.497342,-2.43318 -2.362781,-6.59751 -2.596741,-12.4933 l -19.582267,2.24586 c 0.04679,10.99611 2.807525,19.34877 8.282182,25.05739 5.474657,5.66182 13.288645,8.4925 23.442497,8.4925 8.656509,0 15.628546,-1.80134 20.916036,-5.40432 5.287489,-3.64977 8.937149,-8.4697 10.949202,-14.45907 1.497342,-4.58561 2.246375,-11.13641 2.246375,-19.65254 V 64.940222 Z" />
+  </g>
+</svg>
