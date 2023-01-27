@@ -176,3 +176,23 @@ def run_with_progress_bar(f, my_iter, max_workers: int) -> list[any]:
                 results.append(future.result())
                 pbar.update(1)
     return results
+
+
+class Queryable:
+    """Represents classes that run queries"""
+
+    query: str
+
+
+class CustomQuery(Queryable):
+    """Used to specify custom queries when a Queryable is needed"""
+
+    query: str
+
+    def __init__(self, query: str) -> None:
+        """New CustomQuery instance
+
+        Args:
+            query: the query associated with the instance
+        """
+        self.query = query

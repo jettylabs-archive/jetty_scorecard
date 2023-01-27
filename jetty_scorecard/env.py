@@ -12,6 +12,7 @@ from snowflake.connector import SnowflakeConnection, DictCursor
 import snowflake.connector
 from copy import deepcopy
 from jetty_scorecard.cli import TextFormat
+from jetty_scorecard.util import Queryable
 
 
 class SnowflakeEnvironment:
@@ -440,7 +441,11 @@ class SnowflakeEnvironment:
             None
         """
         with self.conn.cursor(DictCursor) as cur:
-            statement = "SELECT user_name, direct_objects_accessed FROM snowflake.account_usage.access_history WHERE query_start_time > DATEADD('DAY', -90, CURRENT_TIMESTAMP())"
+            statement = (
+                "SELECT user_name, direct_objects_accessed FROM"
+                " snowflake.account_usage.access_history WHERE query_start_time >"
+                " DATEADD('DAY', -90, CURRENT_TIMESTAMP())"
+            )
             rows = cur.execute(statement).fetchall()
         self.access_history = AccessHistory.from_rows(rows)
 
@@ -461,7 +466,10 @@ class SnowflakeEnvironment:
         masking_policy_references = []
         row_access_policy_references = []
         with self.conn.cursor(DictCursor) as cur:
-            statement = "SELECT * FROM SNOWFLAKE.account_usage.policy_references WHERE policy_kind IN ('MASKING_POLICY', 'ROW_ACCESS_POLICY')"
+            statement = (
+                "SELECT * FROM SNOWFLAKE.account_usage.policy_references WHERE"
+                " policy_kind IN ('MASKING_POLICY', 'ROW_ACCESS_POLICY')"
+            )
             for row in cur.execute(statement):
                 masking_policy_reference = MaskingPolicyReference.from_row(row)
                 if masking_policy_reference is not None:
@@ -713,8 +721,9 @@ class SnowflakeEnvironment:
                 self.fetch_policy_references()
             except Exception as e:
                 print(
-                    "~~~ Unable to fetch policy references. This is likely due to insufficient privileges.\n\
-~~~ Feel free to try again later with a user that has access to SNOWFLAKE.ACCOUNT_USAGE.POLICY_REFERENCES"
+                    "~~~ Unable to fetch policy references. This is likely due to"
+                    " insufficient privileges.\n~~~ Feel free to try again later with a"
+                    " user that has access to SNOWFLAKE.ACCOUNT_USAGE.POLICY_REFERENCES"
                 )
                 print(e)
             print("\nAttempting to fetch access history")
@@ -723,8 +732,9 @@ class SnowflakeEnvironment:
                 self.fetch_access_history()
             except Exception as e:
                 print(
-                    "~~~ Unable to fetch access history. This is likely due to insufficient privileges.\n\
-~~~ Feel free to try again later with a user that has access to SNOWFLAKE.ACCOUNT_USAGE.ACCESS_HISTORY"
+                    "~~~ Unable to fetch access history. This is likely due to"
+                    " insufficient privileges.\n~~~ Feel free to try again later with a"
+                    " user that has access to SNOWFLAKE.ACCOUNT_USAGE.ACCESS_HISTORY"
                 )
                 print(e)
 
@@ -781,12 +791,6 @@ class DataAsset:
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} fqn: '{self.fqn()}' owner: '{self.owner}'>"
-
-
-class Queryable:
-    """Represents classes that run queries"""
-
-    query: str
 
 
 class Database(DataAsset, Queryable):
@@ -1049,7 +1053,11 @@ class User(Queryable):
         self.has_password = has_password
 
     def __repr__(self) -> str:
-        return f"<User {self.name} disabled: {self.disabled} owner: {self.owner} last_login: {self.last_successful_login} has_password: {self.has_password}>"
+        return (
+            f"<User {self.name} disabled: {self.disabled} owner:"
+            f" {self.owner} last_login: {self.last_successful_login} has_password:"
+            f" {self.has_password}>"
+        )
 
     @classmethod
     def from_row(cls, row: tuple) -> User:
@@ -1144,7 +1152,10 @@ class RoleGrant(Queryable):
         self.granted_by = granted_by
 
     def __repr__(self) -> str:
-        return f"<RoleGrant {self.role} TO {self.grantee_type} {self.grantee} granted_by: {self.granted_by}>"
+        return (
+            f"<RoleGrant {self.role} TO {self.grantee_type} {self.grantee} granted_by:"
+            f" {self.granted_by}>"
+        )
 
     @classmethod
     def from_row(cls, row: tuple) -> RoleGrant:
@@ -1212,7 +1223,10 @@ class PrivilegeGrant(Queryable):
         self.granted_by = granted_by
 
     def __repr__(self) -> str:
-        return f"<PrivilegeGrant asset:{self.asset} asset_type:{self.asset_type} grantee:{self.grantee} grant_option:{self.grant_option} privilege:{self.privilege} granted_by:{self.granted_by}>"
+        return (
+            "<PrivilegeGrant"
+            f" asset:{self.asset} asset_type:{self.asset_type} grantee:{self.grantee} grant_option:{self.grant_option} privilege:{self.privilege} granted_by:{self.granted_by}>"
+        )
 
     @classmethod
     def from_row(cls, row: tuple) -> PrivilegeGrant | None:
@@ -1281,7 +1295,10 @@ class FutureGrant(Queryable):
         self.privilege = privilege
 
     def __repr__(self) -> str:
-        return f"<FutureGrant {self.target} grantee:{self.grantee} grant_option:{self.grant_option} privilege:{self.privilege}>"
+        return (
+            "<FutureGrant"
+            f" {self.target} grantee:{self.grantee} grant_option:{self.grant_option} privilege:{self.privilege}>"
+        )
 
     @classmethod
     def from_row(cls, row: tuple) -> FutureGrant:
@@ -1466,7 +1483,10 @@ class LoginHistory(Queryable):
         self.success = success
 
     def __repr__(self) -> str:
-        return f"<LoginHistory {self.user} {self.first_authentication_factor} mfa:{self.second_authentication_factor}>"
+        return (
+            "<LoginHistory"
+            f" {self.user} {self.first_authentication_factor} mfa:{self.second_authentication_factor}>"
+        )
 
     # for the query: SELECT * FROM table(snowflake.information_schema.login_history())
     @classmethod
@@ -1497,7 +1517,11 @@ class AccessHistory(Queryable):
 
     tables: pd.DataFrame
     columns: pd.DataFrame
-    query: str = "SELECT user_name, direct_objects_accessed FROM snowflake.account_usage.access_history WHERE query_start_time > DATEADD('DAY', -90, CURRENT_TIMESTAMP());"
+    query: str = (
+        "SELECT user_name, direct_objects_accessed FROM"
+        " snowflake.account_usage.access_history WHERE query_start_time >"
+        " DATEADD('DAY', -90, CURRENT_TIMESTAMP());"
+    )
 
     def __init__(self, tables: pd.DataFrame, columns: pd.DataFrame):
         """
@@ -1585,7 +1609,10 @@ class MaskingPolicyReference(Queryable):
     target_fqn: str
     tag_fqn: str | None
     status: str
-    query: str = "SELECT * FROM SNOWFLAKE.account_usage.policy_references WHERE policy_kind IN ('MASKING_POLICY', 'ROW_ACCESS_POLICY')"
+    query: str = (
+        "SELECT * FROM SNOWFLAKE.account_usage.policy_references WHERE policy_kind IN"
+        " ('MASKING_POLICY', 'ROW_ACCESS_POLICY')"
+    )
 
     def __init__(
         self,
@@ -1625,7 +1652,10 @@ class MaskingPolicyReference(Queryable):
         return util.fqn(self.database, self.schema, self.name)
 
     def __repr__(self) -> str:
-        return f"<MaskingPolicyReference {self.fqn()} id:{self.policy_id} target:{self.target_fqn} tag:{self.tag_fqn} status:{self.status}>"
+        return (
+            "<MaskingPolicyReference"
+            f" {self.fqn()} id:{self.policy_id} target:{self.target_fqn} tag:{self.tag_fqn} status:{self.status}>"
+        )
 
     @classmethod
     def from_row(cls, row: tuple) -> MaskingPolicyReference | None:
@@ -1681,7 +1711,10 @@ class RowAccessPolicyReference(Queryable):
     target_fqn: str
     tag_fqn: str | None
     status: str
-    query: str = "SELECT * FROM SNOWFLAKE.account_usage.policy_references WHERE policy_kind IN ('MASKING_POLICY', 'ROW_ACCESS_POLICY')"
+    query: str = (
+        "SELECT * FROM SNOWFLAKE.account_usage.policy_references WHERE policy_kind IN"
+        " ('MASKING_POLICY', 'ROW_ACCESS_POLICY')"
+    )
 
     def __init__(
         self,
@@ -1721,7 +1754,10 @@ class RowAccessPolicyReference(Queryable):
         return util.fqn(self.database, self.schema, self.name)
 
     def __repr__(self) -> str:
-        return f"<RowAccessPolicyReference {self.fqn()} id:{self.policy_id} target:{self.target_fqn} tag:{self.tag_fqn} status:{self.status}>"
+        return (
+            "<RowAccessPolicyReference"
+            f" {self.fqn()} id:{self.policy_id} target:{self.target_fqn} tag:{self.tag_fqn} status:{self.status}>"
+        )
 
     # for the query: SELECT * FROM SNOWFLAKE.account_usage.policy_references WHERE policy_kind IN ('MASKING_POLICY', 'ROW_ACCESS_POLICY')
     @classmethod

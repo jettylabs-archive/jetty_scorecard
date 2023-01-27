@@ -25,12 +25,12 @@ def create() -> Check:
     )
 
 
-def _runner(chk: Check, _: SnowflakeEnvironment):
+def _runner(_: SnowflakeEnvironment) -> tuple[float, str]:
     """Runner function for the test check"""
-    chk.score = random()
-    chk.details = f"""
+    score = random()
+    details = f"""
 Hello. I'm glad you could give this a shot.
-<p> score: {chk.score} </p>
+<p> score: {score} </p>
 <ul>
     <li>Here's one idea</li>
     <li>Here's another idea</li>
@@ -38,3 +38,4 @@ Hello. I'm glad you could give this a shot.
 <ul>
 """
     time.sleep(random() / 3)
+    return (score, details)

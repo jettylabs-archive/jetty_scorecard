@@ -1,5 +1,5 @@
 from jetty_scorecard import env
-from jetty_scorecard.checks import test_check
+from jetty_scorecard.checks import test_check, has_network_policy
 
 
 def register(env: env.SnowflakeEnvironment):
@@ -12,7 +12,7 @@ def register(env: env.SnowflakeEnvironment):
         test_check.create(),
         test_check.create(),
         test_check.create(),
-        test_check.create(),
+        has_network_policy.create(),
     ]
 
     for check in check_list:
