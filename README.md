@@ -1,6 +1,6 @@
-<center>
+<p align="center">
   <img src="./etc/scorecard_logo.svg" alt="jetty scorecard logo" width="700" >
-</center>
+</p>
 <br><br>
 
 # About Jetty Scorecard
@@ -77,6 +77,6 @@ To provide peace of mind, it is worth noting that the Jetty Scorecard applicatio
 Jetty Labs is building software to simplify access management across the modern data stack. You can see more about what we're working on at https://www.get-jetty.com.
 
 <br>
-<center>
+<p align="center">
 <img src="./etc/logo.svg" alt="jetty scorecard logo" width="50" >
-</center>
+</p>
