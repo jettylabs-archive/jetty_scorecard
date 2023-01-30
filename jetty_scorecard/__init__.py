@@ -4,9 +4,6 @@ from jetty_scorecard.checks import all_checks
 from pathlib import Path
 import pickle
 import webbrowser
-from copy import deepcopy
-
-import jinja2
 
 
 def run():
@@ -38,8 +35,7 @@ def run():
         env.fetch_environment()
 
     if args.dump:
-        with open(args.dump, "wb") as file_handle:
-            pickle.dump(env.copy(), file_handle)
+        write_output_file(args.dump, pickle.dumps(env.copy()), "wb")
 
     all_checks.register(env)
 
@@ -52,7 +48,7 @@ def run():
     webbrowser.open_new_tab(Path(output_path).resolve().as_uri())
 
 
-def write_output_file(output_path: str, content: str):
+def write_output_file(output_path: str, content: str, mode: str = "w"):
     """Write "content" to the specified output_path.
 
     Create any necessary directories and then write the data in content
@@ -66,5 +62,5 @@ def write_output_file(output_path: str, content: str):
         None
     """
     Path(output_path).resolve().parent.mkdir(parents=True, exist_ok=True)
-    with open(output_path, "w") as f:
+    with open(output_path, mode) as f:
         f.write(content)

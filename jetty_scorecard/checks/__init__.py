@@ -6,6 +6,8 @@ from typing import Callable
 import uuid
 from jinja2 import Environment, PackageLoader
 from jetty_scorecard import env
+from jetty_scorecard.util import Queryable, CustomQuery
+from inspect import isclass
 
 
 class CheckStatus(Enum):
@@ -49,17 +51,18 @@ class Check:
           should include information that will help users understand in improve
           their Snowflake configuration
         runner: A function that actually runs the check. This is where the
-          check-specific logic lives
+          check-specific logic lives. It should take an environment and return
+          a tuple of (score: float, details: str)
     """
 
     title: str
     subtitle: str
     description: str
     links: list[tuple[str, str]]
-    objects: list[type]
+    objects: list[type[Queryable] | CustomQuery]
     score: float | None
     details: str | None
-    runner: Callable[[env.SnowflakeEnvironment], None]
+    runner: Callable[[env.SnowflakeEnvironment], tuple[float, str]]
 
     def __init__(
         self,
@@ -68,7 +71,7 @@ class Check:
         description: str,
         links: list[tuple[str, str]],
         objects: list[type],
-        runner: Callable[[Check, env.SnowflakeEnvironment], None],
+        runner: Callable[[env.SnowflakeEnvironment], tuple[float, str]],
     ) -> None:
         """
         Args:
@@ -80,8 +83,10 @@ class Check:
             objects: A list of Queryable objects that the check uses.
               This is used to show the queries that were used to run the
               checks
-            runner: A function that actually runs the check. This is
-              where the check-specific logic lives"""
+            runner: A function that actually runs the check. This is where the
+                check-specific logic lives. It should take an environment and return
+                a tuple of (score: float, details: str)
+        """
         self.title = title
         self.subtitle = subtitle
         self.description = description
@@ -95,12 +100,14 @@ class Check:
         return f"<Check {self.title}>"
 
     def run(self, environment: env.SnowflakeEnvironment) -> None:
-        """Runs the check
+        """Runs the check and updates the score and details on the instance
 
         Args:
             environment: The Snowflake environment to run the check against
         """
-        self.runner(self, environment)
+        (score, details) = self.runner(environment)
+        self.score = score
+        self.details = details
 
     @property
     def queries(self) -> list[str]:
@@ -111,7 +118,12 @@ class Check:
         """
         if self.objects is None:
             return []
-        return [o.query for o in self.objects if issubclass(o, env.Queryable)]
+        return [
+            o.query
+            for o in self.objects
+            if (isclass(o) and issubclass(o, env.Queryable))
+            or isinstance(o, env.Queryable)
+        ]
 
     @property
     def status(self):
