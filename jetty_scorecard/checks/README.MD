@@ -9,6 +9,7 @@ Jetty Scorecard runs different checks to evaluate a Snowflake configuration. The
 -   **Backup ACCOUNTADMIN**: Make sure that there is more than one user with the ACCOUNTADMIN role
 -   **Too many admins**: Make sure a limited number of users have ACCOUNTADMIN or SECURITYADMIN roles
 -   **Inactive Users**: Highlight users who haven't logged in or accessed data in a while
+-   **Managed Access Schemas**: Look for existing managed access schemas
 
 ## Developing a new check
 

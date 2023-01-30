@@ -6,6 +6,7 @@ from jetty_scorecard.checks import (
     overuse_of_admin_roles,
     password_only_login,
     inactive_users,
+    managed_access_schemas,
 )
 
 
@@ -22,6 +23,7 @@ def register(env: env.SnowflakeEnvironment):
         has_network_policy.create(),
         password_only_login.create(),
         inactive_users.create(),
+        managed_access_schemas.create(),
     ]
 
     for check in check_list:
