@@ -13,10 +13,10 @@ Jetty Scorecard is living documentation of Snowflake best practices - it outline
 
 ### Installation
 
-~~Install Jetty Scorecard with~~ (coming soon - for now just clone the repo and run poetry install)
+Install Jetty Scorecard with
 
 ```bash
-pip install **********
+pip install jetty-scorecard
 ```
 
 ### Running Jetty Scorecard
