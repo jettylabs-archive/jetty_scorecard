@@ -50,6 +50,9 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
         float: Score
         str: Details
     """
+    if not env.has_data:
+        return (None, "Unable to check for a backup account administrator")
+
     account_admins = [
         x[0]
         for x in nx.descendants(
@@ -58,9 +61,7 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
         if x[1] == RoleGrantNodeType.USER
     ]
 
-    if not env.has_data:
-        return (None, "Unable to check for a backup account administrator")
-    elif len(account_admins) > 1:
+    if len(account_admins) > 1:
         return (
             1,
             render_string_template(
