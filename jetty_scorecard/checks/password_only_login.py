@@ -26,6 +26,13 @@ def create() -> Check:
         ),
         [
             (
+                "https://docs.snowflake.com/en/user-guide/admin-user-management.html#best-practices-for-password-policies-and-passwords",
+                (
+                    "Best Practices for Password Policies and Passwords (Snowflake"
+                    " Documentation)"
+                ),
+            ),
+            (
                 "https://docs.snowflake.com/en/user-guide/security-mfa.html#managing-mfa-for-an-account-and-users",
                 "Multi-Factor Authentication (MFA) (Snowflake Documentation)",
             ),

@@ -5,6 +5,7 @@ from jetty_scorecard.checks import (
     shadow_future_grants,
     overuse_of_admin_roles,
     password_only_login,
+    inactive_users,
 )
 
 
@@ -20,6 +21,7 @@ def register(env: env.SnowflakeEnvironment):
         shadow_future_grants.create(),
         has_network_policy.create(),
         password_only_login.create(),
+        inactive_users.create(),
     ]
 
     for check in check_list:
