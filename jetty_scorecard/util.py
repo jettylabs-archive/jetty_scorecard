@@ -3,6 +3,8 @@
 from math import ceil
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
+from enum import Enum, auto
+from jinja2 import Environment, BaseLoader
 
 """The background colors for the grade component of the scorecard"""
 GRADE_COLORS = {
@@ -196,3 +198,109 @@ class CustomQuery(Queryable):
             query: the query associated with the instance
         """
         self.query = query
+
+
+def truncated_table(fqn: str) -> str | None:
+    """Truncate a fully qualified name to its table
+
+    Args:
+        fqn (str): fully qualified asset name
+
+    Returns:
+        str | None: fully qualified table name or None if no table was found
+
+    """
+    split_name = fqn.split('"."')[:3]
+    if len(split_name) != 3:
+        return None
+    else:
+        partial_name = '"."'.join(split_name)
+        if not partial_name.endswith('"'):
+            partial_name += '"'
+        return partial_name
+
+
+def truncated_schema(fqn: str) -> str | None:
+    """Truncate a fully qualified name to its schema
+
+    Args:
+        fqn (str): fully qualified asset name
+
+    Returns:
+        str | None: fully qualified schema name or None if no table was found
+
+    """
+    split_name = fqn.split('"."')[:2]
+    if len(split_name) != 2:
+        return None
+    else:
+        partial_name = '"."'.join(split_name)
+        if not partial_name.endswith('"'):
+            partial_name += '"'
+        return partial_name
+
+
+def truncated_database(fqn: str) -> str | None:
+    """Truncate a fully qualified name to its database
+
+    Args:
+        fqn (str): fully qualified asset name
+
+    Returns:
+        str | None: fully qualified database name or None if no table was found
+
+    """
+    split_name = fqn.split('"."')[:1]
+    if len(split_name) != 1:
+        return None
+    else:
+        partial_name = split_name[0]
+        if not partial_name.endswith('"'):
+            partial_name += '"'
+        return partial_name
+
+
+class FQNType(Enum):
+    """Enum to classify the asset type of a fully qualified name"""
+
+    DATABASE = auto()
+    SCHEMA = auto()
+    TABLE = auto()
+
+
+def fqn_type(fqn: str) -> FQNType:
+    """Classify the asset type of a fully qualified name
+
+    Args:
+        fqn (str): fully qualified asset name
+
+    Returns:
+        FQNType: the type of the asset
+
+    """
+    num_segments = len(fqn.split('"."'))
+
+    match num_segments:
+        case 1:
+            return FQNType.DATABASE
+        case 2:
+            return FQNType.SCHEMA
+        case 3:
+            return FQNType.TABLE
+        case _:
+            raise Exception(f"{fqn} is not a valid fully qualified name")
+
+
+def render_string_template(template: str, context: any) -> str:
+    """Render a string template
+
+    Args:
+        template (str): the template to render
+        context (any): the context to render the template with
+
+    Returns:
+        str: the rendered template
+
+    """
+    jinja_template = Environment(loader=BaseLoader()).from_string(template)
+    return jinja_template.render(context)

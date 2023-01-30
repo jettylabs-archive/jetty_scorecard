@@ -13,6 +13,8 @@ import snowflake.connector
 from copy import deepcopy
 from jetty_scorecard.cli import TextFormat
 from jetty_scorecard.util import Queryable
+from enum import Enum, auto
+import networkx as nx
 
 
 class SnowflakeEnvironment:
@@ -86,6 +88,7 @@ class SnowflakeEnvironment:
     conn: SnowflakeConnection | None
     max_workers: int
     checks: list[checks.Check]
+    _role_graph: nx.DiGraph
 
     def __init__(self, max_workers):
         self.max_workers = max_workers
@@ -108,6 +111,7 @@ class SnowflakeEnvironment:
         self.checks = []
         self.masking_policy_references = None
         self.row_access_policy_references = None
+        self._role_graph = None
 
     def copy(self) -> SnowflakeEnvironment:
         """Copy an existing SnowflakeEnvironment
@@ -135,6 +139,7 @@ class SnowflakeEnvironment:
         env.has_network_policy = deepcopy(self.has_network_policy)
         env.is_enterprise_or_higher = deepcopy(self.is_enterprise_or_higher)
         env.conn = None
+        env._role_graph = None
         env.checks = deepcopy(self.checks)
         env.masking_policy_references = deepcopy(self.masking_policy_references)
         env.row_access_policy_references = deepcopy(self.row_access_policy_references)
@@ -169,6 +174,29 @@ class SnowflakeEnvironment:
 
         return True
 
+    @property
+    def role_graph(self) -> nx.DiGraph | None:
+        if not self.has_data:
+            return None
+        if self._role_graph is None:
+            DG = nx.DiGraph()
+            DG.add_edges_from(
+                [
+                    (
+                        (r.role, RoleGrantNodeType.ROLE),
+                        (
+                            r.grantee,
+                            RoleGrantNodeType.USER
+                            if r.grantee_type == "USER"
+                            else RoleGrantNodeType.ROLE,
+                        ),
+                    )
+                    for r in self.role_grants
+                ]
+            )
+            self._role_graph = DG
+        return self._role_graph
+
     def run_checks(self):
         """Run all checks in the environment
 
@@ -180,6 +208,15 @@ class SnowflakeEnvironment:
         print("\nRunning checks")
         for check in tqdm(self.checks):
             check.run(self)
+
+    @property
+    def has_data(self) -> bool:
+        """Check if the environment has data
+
+        Returns:
+            True if the environment has data, False otherwise
+        """
+        return self.databases is not None
 
     @property
     def num_pass_checks(self) -> int:
@@ -1788,6 +1825,11 @@ class RowAccessPolicyReference(Queryable):
                 tag_fqn,
                 row["POLICY_STATUS"],
             )
+
+
+class RoleGrantNodeType(Enum):
+    ROLE = auto()
+    USER = auto()
 
 
 def print_query(query: str) -> None:
