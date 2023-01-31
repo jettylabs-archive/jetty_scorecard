@@ -74,7 +74,11 @@ To provide peace of mind, it is worth noting that the Jetty Scorecard applicatio
 
 # About Jetty Labs
 
-Jetty Labs is building software to simplify access management across the modern data stack. You can see more about what we're working on at https://www.get-jetty.com.
+Jetty Labs is building software to simplify access management across the modern data stack. Learn more about what we're working on at https://www.get-jetty.com.
+
+# Disclaimer
+
+Jetty Scorecard is designed to be an informative tool to help users understand some of the best practices related to Snowflake account management. It is NOT designed to find every possible vulnerability and misconfiguration. Any configuration decisions, suggested by Jetty Scorecard or not, are ultimately up to each account's database administrators.
 
 <br>
 <p align="center">
