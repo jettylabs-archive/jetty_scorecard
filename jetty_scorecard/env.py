@@ -1277,6 +1277,9 @@ class PrivilegeGrant(Queryable):
         """
         if row["granted_on"] == "ROLE":
             return
+        # FUTURE: Modify this to also work with database roles
+        if row["granted_to"] != "ROLE":
+            return
         else:
             name = util.quote_fqn(row["name"])
             return cls(

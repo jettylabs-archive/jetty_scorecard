@@ -116,7 +116,7 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
             </ul>
         </li>
     {% endfor %}
-    <ul>"""
+    </ul>"""
         details = render_string_template(
             details_template, {"missing_roles": missing_roles}
         )
