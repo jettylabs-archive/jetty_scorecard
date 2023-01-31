@@ -808,6 +808,7 @@ class SnowflakeEnvironment:
         jinja_env = Environment(loader=PackageLoader("jetty_scorecard"))
         template = jinja_env.get_template("base.html.jinja")
 
+        self.checks.sort(key=lambda x: x.title)
         self.checks.sort(key=checks.score_map)
 
         return template.render(

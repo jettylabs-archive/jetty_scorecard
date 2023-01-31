@@ -16,7 +16,7 @@ def create() -> Check:
         Check: The Check instance.
     """
     return Check(
-        "Overuse of Admin Roles",
+        "Users with Admin Roles",
         "Checks the number of users with administrator roles",
         (
             "Only a limited number of users should be granted Snowflake Administrator"

@@ -2,12 +2,14 @@ from jetty_scorecard import env
 from jetty_scorecard.checks import (
     backup_account_admin,
     has_network_policy,
+    inaccessible_objects,
     shadow_future_grants,
     overuse_of_admin_roles,
     password_only_login,
     inactive_users,
     managed_access_schemas,
-    inaccessable_objects,
+    most_used_tables,
+    most_used_columns,
 )
 
 
@@ -25,7 +27,9 @@ def register(env: env.SnowflakeEnvironment):
         password_only_login.create(),
         inactive_users.create(),
         managed_access_schemas.create(),
-        inaccessable_objects.create(),
+        inaccessible_objects.create(),
+        most_used_tables.create(),
+        most_used_columns.create(),
     ]
 
     for check in check_list:
