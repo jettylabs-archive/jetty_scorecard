@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from jetty_scorecard.checks import Check
-from jetty_scorecard.env import SnowflakeEnvironment, AccessHistory
+from jetty_scorecard.env import SnowflakeEnvironment, FutureGrant
 from jetty_scorecard.util import render_string_template, truncated_database
 import pandas as pd
 import numpy as np
@@ -36,7 +36,7 @@ def create() -> Check:
                 "GRANT <privileges> (Snowflake Documentation)",
             ),
         ],
-        [AccessHistory],
+        [FutureGrant],
         _runner,
     )
 
