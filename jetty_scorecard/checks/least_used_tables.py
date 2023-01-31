@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from jetty_scorecard.checks import Check
-from jetty_scorecard.env import SnowflakeEnvironment, AccessHistory
+from jetty_scorecard.env import SnowflakeEnvironment, AccessHistory, Entity
 from jetty_scorecard.util import render_string_template
 import pandas as pd
 
@@ -32,7 +32,7 @@ def create() -> Check:
                 "Access History (Snowflake Documentation)",
             ),
         ],
-        [AccessHistory],
+        [AccessHistory, Entity],
         _runner,
     )
 
@@ -67,6 +67,7 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
         [
             {"object": x.fqn(), "db": x.database, "schema": x.schema}
             for x in env.entities
+            if x.entity_type in ("TABLE", "VIEW")
         ]
     )
 
