@@ -965,6 +965,7 @@ class Entity(DataAsset, Queryable):
         self.database = database
         self.schema = schema
         self.owner = owner
+        self.entity_type = entity_type
 
     def fqn(self) -> str:
         """
