@@ -3,6 +3,7 @@ from __future__ import annotations
 from jetty_scorecard.checks import Check
 from jetty_scorecard.env import SnowflakeEnvironment, AccessHistory
 from jetty_scorecard.util import render_string_template
+import pandas as pd
 
 
 def create() -> Check:
@@ -61,10 +62,27 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
     table_popularity = env.access_history.tables.groupby("object").agg(
         {"usage_count": "sum"}
     )
+
+    all_tables = pd.DataFrame(
+        [
+            {"object": x.fqn(), "db": x.database, "schema": x.schema}
+            for x in env.entities
+        ]
+    )
+
+    combined_tables = all_tables.merge(table_popularity.reset_index(), how="left")
+    combined_tables["usage_count"] = combined_tables["usage_count"].fillna(0)
+    filtered_tables = combined_tables[
+        (combined_tables["schema"] != "INFORMATION_SCHEMA")
+        & (~combined_tables["db"].isin(["SNOWFLAKE", "SNOWFLAKE_SAMPLE_DATA"]))
+    ]
+
     low_usage = (
-        table_popularity.sort_values(["usage_count"], ascending=True)
+        filtered_tables.sort_values(["usage_count", "object"], ascending=True)[
+            ["object", "usage_count"]
+        ]
         .head(10)
-        .to_records()
+        .to_records(False)
     )
 
     details = render_string_template(
@@ -72,7 +90,7 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
 <ul>
     {% for (table, usage_count) in low_usage %}
     <li>
-        <code>{{ table }}</code> (used {{ "{:,}".format(usage_count) }} {% if usage_count == 1 -%} time {% else %} times {% endif %}
+        <code>{{ table }}</code> (used {{ "{:,.0f}".format(usage_count) }} {% if usage_count == 1 -%} time {% else %} times {% endif %}
     </li>
     {% endfor %}
 </ul>""",
