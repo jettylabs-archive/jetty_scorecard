@@ -23,7 +23,7 @@ def create() -> Check:
         "Inaccessible Objects",
         (
             "Check for permissioned objects that are inaccessible because of missing"
-            " database- or schema-level permissions"
+            " database or schema-level permissions"
         ),
         (
             "For a database object such as a function, table, or view to be accessible,"
@@ -117,7 +117,11 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
     for record in records:
         mut_val = missing_permissions.get(record.grantee, [])
         mut_val += [
-            (record.object, record.has_db_permission, record.has_schema_permission)
+            (
+                record.object,
+                record.has_db_permission == True,
+                record.has_schema_permission == True,
+            )
         ]
         missing_permissions[record.grantee] = mut_val
 
@@ -129,16 +133,17 @@ level:
     {% for (role, details) in missing_permissions.items() %}
     <li>{{role}}
         <ul>
+            {% for item in details %}
             <li>
-                <code>{{ details[0] }}</code> - ({% if details[1] and details[2] -%}
-                SCHEMA and DATABASE {% else %}
-                {% if details[1] %}
-                SCHEMA
-                {% else -%}
-                DATABASE
-                {% endif %}
-                {% endif %}
+                <code>{{ item[0] }}</code> - ({% if (not item[1]) and (not item[2]) -%}
+                schema and database level
+                {%- elif not(item[1]) %}
+                schema level
+                {%- else -%}
+                database level
+                {%- endif %})
             </li>
+            {% endfor %}
         </ul>
     </li>
     {% endfor %}
