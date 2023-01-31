@@ -1283,7 +1283,7 @@ class PrivilegeGrant(Queryable):
         if row["granted_to"] != "ROLE":
             return
         else:
-            name = util.quote_fqn(row["name"])
+            name = util.add_missing_quotes_to_fqn(row["name"])
             return cls(
                 name,
                 row["granted_on"],
@@ -1367,7 +1367,7 @@ class FutureGrant(Queryable):
             FQN of the parent asset the future grant is set on.
         """
         name_part = self.target.split(".<")[0]
-        return util.quote_fqn(name_part)
+        return util.add_missing_quotes_to_fqn(name_part)
 
 
 class MaskingPolicy(Queryable):

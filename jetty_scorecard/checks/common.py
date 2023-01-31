@@ -70,6 +70,8 @@ def user_object_access(env: SnowflakeEnvironment) -> pd.DataFrame:
 
     This also excludes database roles (via an inner join)
 
+    Also excludes disabled users, as they don't have access to anything
+
     Args:
         env (SnowflakeEnvironment): environment object
 
@@ -95,11 +97,10 @@ def user_object_access(env: SnowflakeEnvironment) -> pd.DataFrame:
 
     user_group_map = []
     for user in env.users:
-        user = user.name
-        if (user, RoleGrantNodeType.USER) in DG:
+        if (user.name, RoleGrantNodeType.USER) in DG and not user.disabled:
             user_group_map += [
-                {"user": user, "role": x[0]}
-                for x in nx.descendants(DG, (user, RoleGrantNodeType.USER))
+                {"user": user.name, "role": x[0]}
+                for x in nx.descendants(DG, (user.name, RoleGrantNodeType.USER))
                 if x[1] == RoleGrantNodeType.ROLE
             ]
 

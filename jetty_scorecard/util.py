@@ -137,6 +137,22 @@ def quote_fqn(fqn: str) -> str:
     return ".".join([f'"{clean_up_asset_name(x)}"' for x in name_parts])
 
 
+def add_missing_quotes_to_fqn(fqn: str) -> str:
+    """Add quotes to a fully qualified name, but only if necessary
+
+    Takes an optionally quoted FQN and properly quotes it.
+
+    Args:
+        fqn (str): fully qualified name
+
+    Returns:
+        str: quoted fully qualified name
+
+    """
+    name_parts = list(fqn.split("."))
+    return ".".join([f'"{x}"' if not x.startswith('"') else x for x in name_parts])
+
+
 def fqn(*args) -> str:
     """Create a quoted fully qualified name from a list of arguments
 

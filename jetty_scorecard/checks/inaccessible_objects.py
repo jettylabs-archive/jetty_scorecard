@@ -113,7 +113,10 @@ level:
 </ul>
 
 You can grant the nessesary privileges by running
-<code>GRANT USAGE ON { DATABASE | SCHEMA } &lt;db_or_schema_name&gt; TO ROLE &lt;role_name&gt</code>""",
+<code>GRANT USAGE ON { DATABASE | SCHEMA } &lt;db_or_schema_name&gt; TO ROLE &lt;role_name&gt</code>
+
+You also may be able to work around this by using one or more
+<a href=\"https://docs.snowflake.com/en/user-guide/security-access-control-overview.html#enforcement-model-the-primary-role-and-secondary-roles\">secondary roles</a>.""",
             {
                 "missing_permissions": missing_permissions,
             },
