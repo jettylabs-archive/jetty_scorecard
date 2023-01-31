@@ -11,6 +11,7 @@ from jetty_scorecard.checks import (
     most_used_tables,
     most_used_columns,
     least_used_tables,
+    future_grant_coverage,
 )
 
 
@@ -32,6 +33,7 @@ def register(env: env.SnowflakeEnvironment):
         most_used_tables.create(),
         most_used_columns.create(),
         least_used_tables.create(),
+        future_grant_coverage.create(),
     ]
 
     for check in check_list:
