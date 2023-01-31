@@ -10,6 +10,7 @@ from jetty_scorecard.checks import (
     managed_access_schemas,
     most_used_tables,
     most_used_columns,
+    least_used_tables,
 )
 
 
@@ -30,6 +31,7 @@ def register(env: env.SnowflakeEnvironment):
         inaccessible_objects.create(),
         most_used_tables.create(),
         most_used_columns.create(),
+        least_used_tables.create(),
     ]
 
     for check in check_list:

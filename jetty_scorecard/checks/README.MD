@@ -10,6 +10,10 @@ Jetty Scorecard runs different checks to evaluate a Snowflake configuration. The
 -   **Too many admins**: Make sure a limited number of users have ACCOUNTADMIN or SECURITYADMIN roles
 -   **Inactive Users**: Highlight users who haven't logged in or accessed data in a while
 -   **Managed Access Schemas**: Look for existing managed access schemas
+-   **Inaccessible Objects**: Look for objects that have been permissioned, but are missing database or schema usage permissions
+-   **Most Used Tables and Views**: Provide a list of the most commonly and widely used tables/views
+-   **Most Used Columns**: Provide a list of the most commonly and widely used columns
+-   **Least Used Tables and Views**: Provide a list of the least used tables/views
 
 ## Developing a new check
 
