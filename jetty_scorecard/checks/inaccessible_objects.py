@@ -17,10 +17,10 @@ def create() -> Check:
         Check: instance of Check.
     """
     return Check(
-        "Inaccessible Objects",
+        "Inaccessible Tables and Views",
         (
-            "Check for permissioned objects that are inaccessible because of missing"
-            " database or schema-level permissions"
+            "Check for permissioned tables and views that are inaccessible because of"
+            " missing database or schema-level permissions"
         ),
         (
             "For a database object such as a function, table, or view to be accessible,"
@@ -28,10 +28,10 @@ def create() -> Check:
             " If one of those privileges is missing the object will remain"
             " inaccessible, even if object-level permissions have been"
             " granted.<br><br>This Check looks for users who have been granted"
-            " object-level permissions, without also being granted the requisite"
-            " database- and schema-level permissions.<br><br> Note: This check does not"
-            " yet take <em>database role</em> privileges into account. You can read"
-            " more about this Snowflake preview feature <a"
+            " object-level permissions on tables and views, without also being granted"
+            " the requisite database- and schema-level permissions.<br><br> Note: This"
+            " check does not yet take <em>database role</em> privileges into account."
+            " You can read more about this Snowflake preview feature <a"
             ' href="https://docs.snowflake.com/en/user-guide/security-access-control-considerations.html#label-access-control-considerations-database-roles">here</a>.'
             " It also ignores role combinations (using secondary roles) and the admin"
             " capabilities of the <code>ACCOUNTADMIN</code> role (experimentation"
@@ -64,6 +64,9 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
         return None, "Unable to object permissions."
 
     joined_tables = any_object_privileges_by_role(env)
+
+    # Remove ACCOUNTADMIN (they don't seem to have this issue)
+    joined_tables = joined_tables[joined_tables.grantee != "ACCOUNTADMIN"]
 
     missing_db_permissions = joined_tables[~joined_tables.has_db_permission]
     missing_schema_permissions = joined_tables[~joined_tables.has_db_permission]

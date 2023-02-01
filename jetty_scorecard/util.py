@@ -256,6 +256,23 @@ def truncated_schema(fqn: str) -> str | None:
         return partial_name
 
 
+def extract_schema(fqn: str) -> str | None:
+    """Extract the schema from a fully qualified name
+
+    Args:
+        fqn (str): fully qualified asset name
+
+    Returns:
+        str | None: schema name or None if no schema was found
+
+    """
+    truncated = truncated_schema(fqn)
+    if truncated is None:
+        return None
+    else:
+        return f""""{truncated.split('"."')[-1]}"""
+
+
 def truncated_database(fqn: str) -> str | None:
     """Truncate a fully qualified name to its database
 

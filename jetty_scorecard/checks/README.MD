@@ -10,13 +10,13 @@ Jetty Scorecard runs different checks to evaluate a Snowflake configuration. The
 -   **Too many admins**: Make sure a limited number of users have ACCOUNTADMIN or SECURITYADMIN roles
 -   **Inactive Users**: Highlight users who haven't logged in or accessed data in a while
 -   **Managed Access Schemas**: Look for existing managed access schemas
--   **Inaccessible Objects**: Look for objects that have been permissioned, but are missing database or schema usage permissions
+-   **Inaccessible Tables and Views**: Look for tables and views that have been permissioned, but are missing database or schema usage permissions
 -   **Most Used Tables and Views**: Provide a list of the most commonly and widely used tables/views
 -   **Most Used Columns**: Provide a list of the most commonly and widely used columns
 -   **Least Used Tables and Views**: Provide a list of the least used tables/views
 -   **Future Grant Coverage**: Look at the coverage of future grants on existing schemas and databases
--   **Most Accessible Objects**: Provide a list of the 10 most accessible objects
--   **Least Accessible Objects**: Provide a list of the 10 least accessible objects
+-   **Most Accessible Tables and Views**: Provide a list of the 10 most accessible tables and views
+-   **Least Accessible Tables and Views**: Provide a list of the 10 least accessible tables and views
 -   **Active Masking Policies**: Check for active masking policies, and make sure those that have been applied are functioning properly
 -   **Active Masking Policies**: Check for active row access policies, and make sure those that have been applied are functioning properly
 -   **Potentially Sensitive Columns**: Check for potentially sensitive columns that are widely accessible by matching column names with a list of terms (such as _email_, and _ip_address_)

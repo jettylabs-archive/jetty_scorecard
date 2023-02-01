@@ -36,7 +36,7 @@ def any_object_privileges_by_role(env: SnowflakeEnvironment) -> pd.DataFrame:
             if x.asset_type == "SCHEMA" and x.privilege in ("OWNERSHIP", "USAGE")
         ]
     ).drop_duplicates()
-    tables = pd.DataFrame(
+    objects = pd.DataFrame(
         [
             {
                 "object": x.asset,
@@ -45,16 +45,11 @@ def any_object_privileges_by_role(env: SnowflakeEnvironment) -> pd.DataFrame:
                 "grantee": x.grantee,
             }
             for x in env.privilege_grants
-            if x.asset_type not in ("SCHEMA", "DATABASE")
-            and x.grantee not in ("", "ACCOUNTADMIN")
+            if x.asset_type not in ("SCHEMA", "DATABASE") and x.grantee not in ("")
         ]
     ).drop_duplicates()
 
-    joined_tables = (
-        tables[tables.db != '"SNOWFLAKE"']
-        .merge(dbs, how="left")
-        .merge(schemas, how="left")
-    )
+    joined_tables = objects.merge(dbs, how="left").merge(schemas, how="left")
 
     joined_tables["has_db_permission"].fillna(False, inplace=True)
     joined_tables["has_schema_permission"].fillna(False, inplace=True)

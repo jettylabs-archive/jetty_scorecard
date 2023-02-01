@@ -41,7 +41,8 @@ class SnowflakeEnvironment:
           been granted to what users/roles
         privilege_grants: List of PrivilegeGrant instances describing what
           privileges have been granted to roles. This includes privileges on
-          databases, schemas, and tables
+          databases, schemas, and tables, but not on functions, pipes, and other
+          object types.
         row_access_policies: List of RowAccessPolicy instances. Only available
           on Snowflake Enterprise edition.
         masking_policies: List of MaskingPolicy instances. Only available on
@@ -1216,6 +1217,9 @@ class RoleGrant(Queryable):
 
 class PrivilegeGrant(Queryable):
     """Privilege grant metadata from Snowflake
+
+    The way this is collected, it does currently only includes grants on
+    tables, views, databases, and schemas.
 
     Attributes:
         asset: fqn of the asset the privilege is granted (quoted)

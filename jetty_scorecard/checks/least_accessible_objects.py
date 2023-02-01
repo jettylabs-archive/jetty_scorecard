@@ -3,7 +3,13 @@ from __future__ import annotations
 from jetty_scorecard.checks import Check
 from jetty_scorecard.checks.common import user_object_access
 from jetty_scorecard.env import SnowflakeEnvironment, PrivilegeGrant, RoleGrant
-from jetty_scorecard.util import render_check_template
+from jetty_scorecard.util import (
+    render_check_template,
+    extract_schema,
+    truncated_database,
+)
+import pandas as pd
+import numpy as np
 
 
 def create() -> Check:
@@ -15,14 +21,13 @@ def create() -> Check:
         Check: instance of Check.
     """
     return Check(
-        "Least-Accessible Objects",
-        "Find the objects that are accessible by the fewest users",
+        "Least-Accessible Tables and Views",
+        "Find the tables and views that are accessible by the fewest users",
         (
-            "This check looks for the database objects (excluding databases and"
-            " schemas) that are accessible to the fewest users. It ignores"
-            " database roles (currently a Snowflake Preview feature),"
-            " <code>SNOWFLAKE</code> and <code>SNOWFLAKE_SAMPLE_DATA</code> databases,"
-            " <code>INFORMATION_SCHEMA</code> schemas and any admin-specific"
+            "This check looks for the tables and views that are accessible to the"
+            " fewest users. It ignores database roles (currently a Snowflake Preview"
+            " feature), <code>SNOWFLAKE</code> and <code>SNOWFLAKE_SAMPLE_DATA</code>"
+            " databases, <code>INFORMATION_SCHEMA</code> schemas and any admin-specific"
             " permissions that the ACCOUNTADMIN role may have.<br><br>Limiting access"
             " users-level access to match the specific user needs aligns with the"
             " principle of least privilege (PoLP) and helps create a more secure"
@@ -44,7 +49,7 @@ def create() -> Check:
 
 
 def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
-    """Check for most accessible objects
+    """Check for least accessible tables and views
 
     Score is -2 (Insight)
 
@@ -59,10 +64,34 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
         return None, "Unable to read object permissions."
 
     access = user_object_access(env)
-    # each object with a set of users that have access to it
-    set_list = access.groupby("object")["user"].apply(set)
+    # Get all tables/views (only tables/views are included in env.entities)
+    # just in case any have no access granted
+    all_objects = pd.DataFrame([{"object": x.fqn()} for x in env.entities])
+
+    object_access = all_objects.merge(access, how="left")
+    # Filter out the dbs/schemas we want to ignore
+    object_access = object_access[
+        (
+            ~object_access["object"]
+            .apply(truncated_database)
+            .isin(['"SNOWFLAKE"', '"SNOWFLAKE_SAMPLE_DATA"'])
+        )
+        & (
+            ~object_access["object"]
+            .apply(extract_schema)
+            .isin(['"INFORMATION_SCHEMA"'])
+        )
+    ]
+
+    # For all objects, the set of users with access
+    set_list = object_access.groupby("object")["user"].apply(set)
+
+    # Get 10 least accessible tables/views
     least_accessible = (
-        set_list.str.len()
+        set_list.where(set_list != set({np.nan}), None)
+        .str.len()
+        .fillna(0)
+        .astype(int)
         .sort_index()
         .sort_values(ascending=True, kind="mergesort")
         .head(10)

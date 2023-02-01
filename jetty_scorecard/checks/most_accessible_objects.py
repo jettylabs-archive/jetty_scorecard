@@ -3,7 +3,7 @@ from __future__ import annotations
 from jetty_scorecard.checks import Check
 from jetty_scorecard.checks.common import user_object_access
 from jetty_scorecard.env import SnowflakeEnvironment, PrivilegeGrant, RoleGrant
-from jetty_scorecard.util import render_check_template
+from jetty_scorecard.util import render_check_template, extract_schema
 
 
 def create() -> Check:
@@ -15,13 +15,13 @@ def create() -> Check:
         Check: instance of Check.
     """
     return Check(
-        "Most-Accessible Objects",
-        "Find the objects that are accessible by the most users",
+        "Most-Accessible Tables and Views",
+        "Find the tables and views that are accessible by the most users",
         (
-            "This check looks for the database objects (excluding databases and"
-            " schemas) that are accessible to the highest number of users. It ignores"
-            " database roles (currently a Snowflake Preview feature),"
-            " <code>SNOWFLAKE</code> and <code>SNOWFLAKE_SAMPLE_DATA</code> databases,"
+            "This check looks for the tables and views that are accessible to the"
+            " highest number of users. It ignores database roles (currently a Snowflake"
+            " Preview feature), <code>SNOWFLAKE</code> and"
+            " <code>SNOWFLAKE_SAMPLE_DATA</code> databases,"
             " <code>INFORMATION_SCHEMA</code> schemas and any admin-specific"
             " permissions that the ACCOUNTADMIN role may have.<br><br>Limiting access"
             " users-level access to match the specific user needs aligns with the"
@@ -44,7 +44,7 @@ def create() -> Check:
 
 
 def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
-    """Check for most accessible objects
+    """Check for most accessible tables and views
 
     Score is -2 (Insight)
 
@@ -59,6 +59,12 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
         return None, "Unable to read object permissions."
 
     access = user_object_access(env)
+    # Remove the unwanted database and schema objects
+    access = access[
+        (~access["db"].isin(['"SNOWFLAKE"', '"SNOWFLAKE_SAMPLE_DATA"']))
+        & (~access["schema"].apply(extract_schema).isin(['"INFORMATION_SCHEMA"']))
+    ]
+
     # each object with a set of users that have access to it
     set_list = access.groupby("object")["user"].apply(set)
     most_accessible = (
