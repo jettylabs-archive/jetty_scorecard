@@ -99,7 +99,8 @@ If any of this looks interesting, we'd love to hear your feedback!! If you'd be 
 
 Jetty Scorecard is designed to be an informative tool to help users understand some of the best practices related to Snowflake account management. It is NOT designed to find every possible vulnerability and misconfiguration. Any configuration decisions, suggested by Jetty Scorecard or not, are ultimately up to each account's database administrators.
 
-<br>
+#
+
 <p align="center">
 <img src="./etc/logo.svg" alt="jetty scorecard logo" width="50" >
 </p>
