@@ -5,6 +5,11 @@
 
 # About Jetty Scorecard
 
+<p align="center">
+  <img src="./etc/scorecard_screenshot.png" alt="jetty scorecard screenshot" width="830" >
+</p>
+<br><br>
+
 It can be hard to keep track of, not to mention follow, data infrastructure best practices - we want to change that!
 
 Jetty Scorecard is living documentation of Snowflake best practices - it outlines recommendations with links to relevant documentation, and does so in the context of your existing environment. This makes it easy to know what you can do right now to improve your security and maintainability.
