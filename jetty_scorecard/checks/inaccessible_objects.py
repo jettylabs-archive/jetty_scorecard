@@ -3,7 +3,7 @@ from __future__ import annotations
 from jetty_scorecard.checks import Check
 from jetty_scorecard.checks.common import any_object_privileges_by_role
 from jetty_scorecard.env import SnowflakeEnvironment, PrivilegeGrant
-from jetty_scorecard.util import render_string_template
+from jetty_scorecard.util import render_check_template
 import pandas as pd
 
 
@@ -33,8 +33,9 @@ def create() -> Check:
             " yet take <em>database role</em> privileges into account. You can read"
             " more about this Snowflake preview feature <a"
             ' href="https://docs.snowflake.com/en/user-guide/security-access-control-considerations.html#label-access-control-considerations-database-roles">here</a>.'
-            " It also ignores the <code>ACCOUNTADMIN</code> role as it does not seem to"
-            " face this same restriction."
+            " It also ignores role combinations (using secondary roles) and the admin"
+            " capabilities of the <code>ACCOUNTADMIN</code> role (experimentation"
+            " appears to indicate that it does not face this same restriction)."
         ),
         [
             (
@@ -89,34 +90,8 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
         missing_permissions[record.grantee] = mut_val
 
     if len(missing_permissions) > 0:
-        details = render_string_template(
-            """The following users are unable to access the specified objects because of missing permissions at the schema or database
-level:
-<ul>
-    {% for (role, details) in missing_permissions.items() %}
-    <li>{{role}}
-        <ul>
-            {% for item in details %}
-            <li>
-                <code>{{ item[0] }}</code> - ({% if (not item[1]) and (not item[2]) -%}
-                schema and database level
-                {%- elif not(item[1]) -%}
-                schema level
-                {%- else -%}
-                database level
-                {%- endif %})
-            </li>
-            {% endfor %}
-        </ul>
-    </li>
-    {% endfor %}
-</ul>
-
-You can grant the nessesary privileges by running
-<code>GRANT USAGE ON { DATABASE | SCHEMA } &lt;db_or_schema_name&gt; TO ROLE &lt;role_name&gt</code>
-
-You also may be able to work around this by using one or more
-<a href=\"https://docs.snowflake.com/en/user-guide/security-access-control-overview.html#enforcement-model-the-primary-role-and-secondary-roles\">secondary roles</a>.""",
+        details = render_check_template(
+            "inaccessible_objects.html.jinja",
             {
                 "missing_permissions": missing_permissions,
             },

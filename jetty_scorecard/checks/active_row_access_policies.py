@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from jetty_scorecard.checks import Check
-from jetty_scorecard.util import render_string_template
+from jetty_scorecard.util import render_check_template
 from jetty_scorecard.env import (
     SnowflakeEnvironment,
     RowAccessPolicy,
@@ -21,9 +21,9 @@ def create() -> Check:
         (
             "Row access policies make it possible to return only specific data,"
             " depending on criteria such as who is running a query. For example, a row"
-            " access policy could be used to filter sales data to accounts relevant"
-            " data for a specific employee. By using mapping tables, this easily scale"
-            " to meet the needs of large teams."
+            " access policy could be used to filter sales data to prospects in the"
+            " user's sales territory. By using mapping tables, this easily scale to"
+            " meet the needs of large teams."
         ),
         [
             (
@@ -70,18 +70,9 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
     elif env.row_access_policy_references is None:
         policy_names = [x.fqn() for x in env.row_access_policies]
         score = -2
-        details = render_string_template(
-            """You have the following row access policies in your environment:
-<ul>
-    {% for policy in policy_names|sort %}
-    <li>{{ policy }}</li>
-    {% endfor %}
-</ul>
-
-You can run Jetty Scorecard again using a role that can access <code>SNOWFLAKE.ACCOUNT_USAGE.POLICY_REFERENCES</code>
-to check if all of these polices have been successfully applied in at least one location. You can also check this
-manually by running <code>"SELECT * FROM SNOWFLAKE.ACCOUNT_USAGE.POLICY_REFERENCES WHERE policy_kind = 'ROW_ACCESS_POLICY'</code>.""",
-            policy_names=policy_names,
+        details = render_check_template(
+            "active_row_access_policies_list.html.jinja",
+            {"policy_names": policy_names},
         )
 
     else:
@@ -109,40 +100,8 @@ manually by running <code>"SELECT * FROM SNOWFLAKE.ACCOUNT_USAGE.POLICY_REFERENC
 
         return (
             1,
-            render_string_template(
-                """{% if misapplied_policies|length > 0 %}
-The following policies are applied to the given objects, but have a status other than <code>ACTIVE</code>:
-<ul>
-    {% for (policy, target, status) in misapplied_policies|sort(attribute="1,0") %}
-    <li>
-        <code>{{ policy }}</code> applied to <code> {{ target }}</code>: <strong>{{ status }}</strong>
-    </li>
-    {% endfor %}
-</ul>
-<br>
-{% endif %}
-
-{% if unused_policies|length > 0 %}
-The following policies exist but have not been applied anywhere:
-<ul>
-    {% for policy in unused_policies|sort %}
-    <li>
-        <code>{{ policy }}</code>
-    </li>
-    {% endfor %}
-</ul>
-<br>
-{% endif %}
-{% if active_policies|length > 0 %}
-The following policies are applied to the given objects and have an <code>ACTIVE</code> status:
-<ul>
-    {% for (policy, target) in active_policies|sort(attribute="1,0") %}
-    <li>
-        <code>{{ policy }}</code> applied to <code>{{ target }}</code>
-    </li>
-    {% endfor %}
-</ul>
-{% endif %}""",
+            render_check_template(
+                "active_row_access_policies.html.jinja",
                 {
                     "misapplied_policies": misapplied_policies,
                     "unused_policies": unused_policies,

@@ -1,0 +1,10 @@
+{% import 'util.jinja' as util %}
+
+The least used tables and views in your account are:
+<ul>
+    {% for (table, usage_count) in low_usage %}
+    <li>
+        <code>{{ table }}</code> (used {{ "{:,.0f}".format(usage_count) }} {{ util.plural("time", usage_count) }})
+    </li>
+    {% endfor %}
+</ul>

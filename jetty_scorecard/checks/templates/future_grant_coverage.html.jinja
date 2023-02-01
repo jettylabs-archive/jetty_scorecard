@@ -1,0 +1,44 @@
+{% if db_without_future_grants|length > 0 %}
+The following databases do not have future grants that will apply to new schemas:
+<ul>
+    {% for db in db_without_future_grants|sort %}
+    <li><code>{{ db }}</code></li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if schema_without_future_grants|length > 0 %}
+The following schemas do not have any future grants that will apply to new objects (granted at the schema or database
+level):
+<ul>
+    {% for schema in schema_without_future_grants|sort %}
+    <li><code>{{ schema }}</code></li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+{% if db_with_future_grants|length > 0 %}
+The following databases have future grants that will apply to new schemas:
+<ul>
+    {% for db in db_with_future_grants|sort %}
+    <li><code>{{ db }}</code></li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if schema_with_future_grants|length > 0 %}
+The following schemas have future grants that will apply to the new object types listed below (granted at the schema or
+database level):
+<ul>
+    {% for (schema, object_types) in schema_with_future_grants.items()|sort(attribute='0') %}
+    <li><code>{{ schema }}</code>
+        <ul>
+            {% for object_type in object_types|sort %}
+            <li>{{ object_type }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}

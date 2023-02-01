@@ -1,0 +1,8 @@
+There are {{account_admins|length}} users in your account with the <code>ACCOUNTADMIN</code> role:
+<ul>
+    {% for (user) in account_admins|sort %}
+    <li>
+        {{ user }}
+    </li>
+    {% endfor %}
+</ul>

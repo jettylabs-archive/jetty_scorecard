@@ -61,8 +61,8 @@ def create() -> Check:
         "Find potentially sensitive columns that are widely accessible",
         (
             "This check looks for potentially sensitive column names (things like"
-            " email, first_name, etc.) that are widely visible (here, we'll check for"
-            " visibility for the greater of 3 users or 10% of all users). This check"
+            " email, first_name, etc.) that are widely visible (here, we'll use a"
+            " threshold of the greater of 3 users or 10% of all users). This check"
             " excludes columns that also include words like hashed and masked, and"
             " excludes columns that have an active masking policy applied to them (if"
             " Scorecard has permission to see masking policy references).<br><br>If you"
@@ -71,7 +71,7 @@ def create() -> Check:
             " hierarchies, automatic data classification, and tag-based data"
             " masking.<br><br>This check relies on simple pattern matching, so some"
             " columns may not be sensitive, and some sensitive columns will be missed."
-            " This check is intended to provide a starting point in ensuring that"
+            " It is intended to provide a starting point in ensuring that"
             " sensitive data is appropriately protected.<br><br>Note: This check"
             " excludes access granted via database roles (a preview feature in"
             " Snowflake), and may not take all ACCOUNTADMIN permissions into account."

@@ -1,0 +1,21 @@
+{% import 'util.jinja' as util %}
+
+The most frequently used tables and views in your account are:
+<ul>
+    {% for (table, user_count, usage_count) in top_usage %}
+    <li>
+        <code>{{ table }}</code> (used {{ "{:,.0f}".format(usage_count) }} {{ util.plural("time", usage_count)}}
+        by {{ "{:,.0f}".format(user_count) }} {{ util.plural("user", user_count) }})
+    </li>
+    {% endfor %}
+</ul>
+
+The most widely used tables and views in your account are:
+<ul>
+    {% for (table, user_count, usage_count) in most_users %}
+    <li>
+        <code>{{ table }}</code> (used {{ "{:,.0f}".format(usage_count) }} {{ util.plural("time", usage_count)}}
+        by {{ "{:,.0f}".format(user_count) }} {{ util.plural("user", user_count) }})
+    </li>
+    {% endfor %}
+</ul>

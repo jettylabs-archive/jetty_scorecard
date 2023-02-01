@@ -6,7 +6,7 @@ from jetty_scorecard.util import (
     fqn_type,
     FQNType,
     truncated_database,
-    render_string_template,
+    render_check_template,
 )
 from random import random
 
@@ -98,27 +98,14 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
                 if grantee not in future_grant_map[db]["schemas"][schema]:
                     overridden_roles.append(grantee)
             if len(overridden_roles) > 0:
-                missing_roles.append((schema, overridden_roles))
+                missing_roles.append(((schema, db[1]), overridden_roles))
 
     num_dbs = len(future_grant_map)
-    num_affected_dbs = len(set([truncated_database(x[0]) for x in missing_roles]))
+    num_affected_dbs = len(set([truncated_database(x[0][0]) for x in missing_roles]))
 
     if num_affected_dbs > 0:
-        details_template = """The future grants for the the following schema/asset type combinations override those at the database level. The listed roles have inactive future grants set at the database but no active future grants at the schema level.
-    <ul>
-    {% for (schema, roles) in missing_roles %}
-        <li>
-            <code>{{ schema }}</code>
-            <ul>
-                {% for role in roles %}
-                    <li>{{ role }}</li>
-                {% endfor %}
-            </ul>
-        </li>
-    {% endfor %}
-    </ul>"""
-        details = render_string_template(
-            details_template, {"missing_roles": missing_roles}
+        details = render_check_template(
+            "shadow_future_grants.html.jinja", {"missing_roles": missing_roles}
         )
     else:
         details = (

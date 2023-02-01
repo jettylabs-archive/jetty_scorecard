@@ -1,0 +1,11 @@
+You have the following data masking policies in your environment:
+<ul>
+    {% for policy in policy_names|sort %}
+    <li>{{ policy }}</li>
+    {% endfor %}
+</ul>
+
+You can run Jetty Scorecard again using a role that can access <code>SNOWFLAKE.ACCOUNT_USAGE.POLICY_REFERENCES</code>
+to check if all of these polices have been successfully applied in at least one location. You can also check this
+manually by running
+<code>"SELECT * FROM SNOWFLAKE.ACCOUNT_USAGE.POLICY_REFERENCES WHERE policy_kind = 'MASKING_POLICY'</code>.""",

@@ -1,0 +1,21 @@
+{% if no_login|length > 0 %}
+The following users have not logged in in the last 7 days:
+<ul>
+    {% for user in no_login %}
+    <li>{{ user }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% if no_access is not none and no_access|length > 0 %}
+The following users have not accessed a table in the last 90 days:
+<ul>
+    {% for user in no_access %}
+    <li>{{ user }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% if no_login|length > 0 or (no_access is not none and no_access|length > 0) %}
+Consider disabling or dropping the users listed above.
+{% else %}
+All of your non-disabled users have logged in within the last 7 days.
+{% endif %}

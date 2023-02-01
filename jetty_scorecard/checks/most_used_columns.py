@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from jetty_scorecard.checks import Check
 from jetty_scorecard.env import SnowflakeEnvironment, AccessHistory
-from jetty_scorecard.util import render_string_template
+from jetty_scorecard.util import render_check_template
 
 
 def create() -> Check:
@@ -71,26 +71,8 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
         .to_records()
     )
 
-    details = render_string_template(
-        """The most frequently used columns in your account are:
-<ul>
-    {% for (column, user_count, usage_count) in top_usage %}
-    <li>
-        <code>{{ column }}</code> (used {{ "{:,.0f}".format(usage_count) }} {% if usage_count == 1 -%} time {% else %} times {% endif %}
-        by {{ "{:,.0f}".format(user_count) }} {% if user_count == 1 -%} user {% else %} users {% endif %})
-    </li>
-    {% endfor %}
-</ul>
-
-The most widely used columns in your account are:
-<ul>
-    {% for (column, user_count, usage_count) in most_users %}
-    <li>
-        <code>{{ column }}</code> (used {{ "{:,.0f}".format(usage_count) }} {% if usage_count == 1 -%} time {% else %} times {% endif %}
-        by {{ "{:,.0f}".format(user_count) }} {% if user_count == 1 -%} user {% else %} users {% endif %})
-    </li>
-    {% endfor %}
-</ul>""",
+    details = render_check_template(
+        "most_used_columns.html.jinja",
         {
             "top_usage": top_usage,
             "most_users": most_users,

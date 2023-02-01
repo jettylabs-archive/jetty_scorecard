@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from jetty_scorecard.checks import Check
 from jetty_scorecard.env import SnowflakeEnvironment, AccessHistory, Entity
-from jetty_scorecard.util import render_string_template
+from jetty_scorecard.util import render_check_template
 import pandas as pd
 
 
@@ -86,15 +86,8 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
         .to_records(False)
     )
 
-    details = render_string_template(
-        """The least used tables and views in your account are:
-<ul>
-    {% for (table, usage_count) in low_usage %}
-    <li>
-        <code>{{ table }}</code> (used {{ "{:,.0f}".format(usage_count) }} {% if usage_count == 1 -%} time {% else %} times {% endif %}
-    </li>
-    {% endfor %}
-</ul>""",
+    details = render_check_template(
+        "least_used_tables.html.jinja",
         {
             "low_usage": low_usage,
         },

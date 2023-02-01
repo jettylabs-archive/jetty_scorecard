@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from jetty_scorecard.checks import Check
 from jetty_scorecard.env import SnowflakeEnvironment, FutureGrant
-from jetty_scorecard.util import render_string_template, truncated_database
+from jetty_scorecard.util import render_check_template, truncated_database
 import pandas as pd
 import numpy as np
 
@@ -23,8 +23,9 @@ def create() -> Check:
             " define permissions and ownership of future database objects before they"
             " are created. Effectively using future grants helps reduce the risk of"
             " improper data access and allows expected permissions to be applied"
-            " automatically.<br><br>This check excludes the SNOWFLAKE and"
-            " SNOWFLAKE_SAMPLE_DATA databases, as well as INFORMATION_SCHEMA schemas."
+            " automatically.<br><br>This check excludes the <code>SNOWFLAKE</code> and"
+            " <code>SNOWFLAKE_SAMPLE_DATA</code> databases, as well as"
+            " <code>INFORMATION_SCHEMA</code> schemas."
         ),
         [
             (
@@ -163,51 +164,8 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
         .to_records()
     )
 
-    details = render_string_template(
-        """{% if db_without_future_grants|length > 0 %}
-The following databases do not have future grants that will apply to new schemas:
-<ul>
-    {% for db in db_without_future_grants|sort %}
-    <li><code>{{ db }}</code></li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-{% if schema_without_future_grants|length > 0 %}
-The following schemas do not have any future grants that will apply to new objects (granted at the schema or database
-level):
-<ul>
-    {% for schema in schema_without_future_grants|sort %}
-    <li><code>{{ schema }}</code></li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-
-{% if db_with_future_grants|length > 0 %}
-The following databases have future grants that will apply to new schemas:
-<ul>
-    {% for db in db_with_future_grants|sort %}
-    <li><code>{{ db }}</code></li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-{% if schema_with_future_grants|length > 0 %}
-The following schemas have future grants that will apply to the new object types listed below (granted at the schema or
-database level):
-<ul>
-    {% for (schema, object_types) in schema_with_future_grants.items()|sort(attribute='0') %}
-    <li><code>{{ schema }}</code>
-        <ul>
-            {% for object_type in object_types|sort %}
-            <li>{{ object_type }}</li>
-            {% endfor %}
-        </ul>
-    </li>
-    {% endfor %}
-</ul>
-{% endif %}""",
+    details = render_check_template(
+        "future_grant_coverage.html.jinja",
         {
             "schema_with_future_grants": schema_with_future_grants,
             "schema_without_future_grants": schema_without_future_grants,

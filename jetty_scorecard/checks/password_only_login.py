@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from jetty_scorecard.checks import Check
 from jetty_scorecard.env import SnowflakeEnvironment, LoginHistory
-from jetty_scorecard.util import render_string_template
+from jetty_scorecard.util import render_check_template
 
 
 def create() -> Check:
@@ -80,21 +80,8 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
 
     score = 1 - (len(password_only_logins) / total_logins)
 
-    details = render_string_template(
-        """{{ percent_password_only|round(precision=2, method='common') }}%
-    of logins over the past 7 days have been via password, without MFA. These
-    logins have been from the following user(s):
-    <ul>
-        {% for (user) in password_only_users|sort %}
-        <li>
-            {{ user }}
-        </li>
-        {% endfor %}
-    </ul>
-    {% if percent_password_only > 5 %}
-    If you must use password-only authentication, consider implementing a password policy.
-    {% endif %}
-    """,
+    details = render_check_template(
+        "password_only_login.html.jinja",
         {
             "percent_password_only": percent_password_only,
             "password_only_users": password_only_users,

@@ -3,7 +3,7 @@ from __future__ import annotations
 from jetty_scorecard.checks import Check
 from jetty_scorecard.checks.common import user_object_access
 from jetty_scorecard.env import SnowflakeEnvironment, PrivilegeGrant, RoleGrant
-from jetty_scorecard.util import render_string_template
+from jetty_scorecard.util import render_check_template
 
 
 def create() -> Check:
@@ -70,16 +70,7 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
         .to_records()
     )
 
-    return -2, render_string_template(
-        """The following are the least accessible objects in your account:
-<ul>
-    {% for (object, user_count) in least_accessible|sort(attribute="1,0") %}
-    <li><code> {{ object }} </code> (accessible by {{ "{:,.0f}".format(user_count) }} {% if user_count == 1 %}
-        user
-        {% else %}
-        users
-        {% endif %})
-        {% endfor %}
-</ul>""",
+    return -2, render_check_template(
+        "least_accessible_objects.html.jinja",
         {"least_accessible": least_accessible},
     )

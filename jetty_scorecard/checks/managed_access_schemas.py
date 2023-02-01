@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from jetty_scorecard.checks import Check
 from jetty_scorecard.env import SnowflakeEnvironment, Schema
-from jetty_scorecard.util import render_string_template
+from jetty_scorecard.util import render_check_template
 
 
 def create() -> Check:
@@ -69,16 +69,8 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
     if len(managed_access_schemas) > 0:
         return (
             1,
-            render_string_template(
-                """The following are managed access schemas:
-<ul>
-    {% for schema in managed_access_schemas %}
-    <li><code>{{ schema }}</code></li>
-    {% endfor %}
-</ul>
-
-You can convert existing schemas to be managed access schemas with the
-<code>ALTER SCHEMA &lt;name&gt; ENABLE MANAGED ACCESS</code>""",
+            render_check_template(
+                "managed_access_schemas.html.jinja",
                 {"managed_access_schemas": managed_access_schemas},
             ),
         )
