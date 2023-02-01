@@ -45,7 +45,7 @@ def parse_cli_args() -> argparse.Namespace:
         comments, or suggestions!""",
     )
 
-    parser.add_argument("-v", "--version", action="version", version="%(prog)s 0.1.2")
+    parser.add_argument("-v", "--version", action="version", version="%(prog)s 0.1.3")
 
     details_group = parser.add_argument_group(
         "connection information", "basic information for the Snowflake connection"

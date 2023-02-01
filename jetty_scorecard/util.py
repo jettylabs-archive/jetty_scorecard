@@ -313,15 +313,14 @@ def fqn_type(fqn: str) -> FQNType:
     """
     num_segments = len(fqn.split('"."'))
 
-    match num_segments:
-        case 1:
-            return FQNType.DATABASE
-        case 2:
-            return FQNType.SCHEMA
-        case 3:
-            return FQNType.TABLE
-        case _:
-            raise Exception(f"{fqn} is not a valid fully qualified name")
+    if num_segments == 1:
+        return FQNType.DATABASE
+    elif num_segments == 2:
+        return FQNType.SCHEMA
+    elif num_segments == 3:
+        return FQNType.TABLE
+    else:
+        raise Exception(f"{fqn} is not a valid fully qualified name")
 
 
 def render_string_template(template: str, context: any) -> str:
