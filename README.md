@@ -79,7 +79,21 @@ To provide peace of mind, it is worth noting that the Jetty Scorecard applicatio
 
 # About Jetty Labs
 
-Jetty Labs is building software to simplify access management across the modern data stack. Learn more about what we're working on at https://www.get-jetty.com.
+Jetty Labs is reinventing access control for the data teams.
+
+Our principal offering, Jetty Core, integrates with tools from across the data stack and centralizes access control into a single, version-controlled interface. Jetty Core lets users configure access policies in code using the tools today's data owners know and love, and then deploy those configurations in seconds.
+
+Try it out today with `pip install jetty-core`
+
+### Learn more
+
+-   [Jetty Documentation](https://docs.get-jetty.com?utm_source=scorecard&utm_medium=python&utm_campaign=scorecard")
+-   [Jetty Demo Video (YouTube)](https://bit.ly/jetty-demo)
+-   [Jetty Homepage](https://www.get-jetty.com?utm_source=scorecard&utm_medium=python&utm_campaign=scorecard)
+
+### Get in touch
+
+If any of this looks interesting, we'd love to hear your feedback!! If you'd be willing to chat, shoot us an email at [product@get-jetty.com](mailto:product@get-jetty.com) - if we end up having a conversation, we'd love to send you a gift card to show our appreciation for your time.
 
 # Disclaimer
 
