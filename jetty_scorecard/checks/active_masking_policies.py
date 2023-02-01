@@ -100,8 +100,7 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
         else:
             score = 1
 
-        return (
-            1,
+        details = (
             render_check_template(
                 "active_masking_policies.html.jinja",
                 {
@@ -111,3 +110,5 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
                 },
             ),
         )
+
+    return score, details
