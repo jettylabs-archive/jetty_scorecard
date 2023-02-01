@@ -18,8 +18,8 @@ def create() -> Check:
         "Inactive Users",
         "Check for non-disabled users that haven't used Snowflake in a while",
         (
-            "When a users stops using Snowflake, their account can be dropped or"
-            " disabled. If they are not, those unused accounts represent a possible"
+            "When a user stops using Snowflake, their account can be dropped or"
+            " disabled. If it is not, that unused account represent a possible"
             " point of entry into the system. This check looks for non-disabled users"
             " that haven't logged in for the last 7 days or haven't accessed a table in"
             " the last 90 days (Enterprise edition only).<br><br>Note: This check"
