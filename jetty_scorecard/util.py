@@ -4,7 +4,7 @@ from math import ceil
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 from enum import Enum, auto
-from jinja2 import Environment, BaseLoader
+from jinja2 import Environment, BaseLoader, PackageLoader
 
 """The background colors for the grade component of the scorecard"""
 GRADE_COLORS = {
@@ -320,3 +320,21 @@ def render_string_template(template: str, context: any) -> str:
     """
     jinja_template = Environment(loader=BaseLoader()).from_string(template)
     return jinja_template.render(context)
+
+
+def render_check_template(template_name: str, context: any) -> str:
+    """Render a stored template
+
+    Args:
+        template_name (str): the template to render. This should be saved
+          in the `checks/templates` directory
+        contex (any): the context to render the template with
+
+    Returns:
+        str: the rendered template
+
+    """
+    jinja_env = Environment(loader=PackageLoader("jetty_scorecard.checks"))
+    template = jinja_env.get_template(template_name)
+
+    return template.render(context)

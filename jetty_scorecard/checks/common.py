@@ -76,7 +76,9 @@ def user_object_access(env: SnowflakeEnvironment) -> pd.DataFrame:
         env (SnowflakeEnvironment): environment object
 
     Returns:
-        pd.DataFrame: DataFrame of objects and users that can access them
+        pd.DataFrame: DataFrame of objects and users that can access them.
+          Colums are: ['object', 'db', 'schema', 'grantee', 'has_db_permission',
+          'has_schema_permission', 'user', 'role']
 
     """
     DG = nx.DiGraph()

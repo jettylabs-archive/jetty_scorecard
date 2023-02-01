@@ -76,8 +76,8 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
 <ul>
     {% for (table, user_count, usage_count) in top_usage %}
     <li>
-        <code>{{ table }}</code> (used {{ "{:,}".format(usage_count) }} {% if usage_count == 1 -%} time {% else %} times {% endif %}
-        by {{ "{:,}".format(user_count) }} {% if user_count == 1 -%} user {% else %} users {% endif %})
+        <code>{{ table }}</code> (used {{ "{:,.0f}".format(usage_count) }} {% if usage_count == 1 -%} time {% else %} times {% endif %}
+        by {{ "{:,.0f}".format(user_count) }} {% if user_count == 1 -%} user {% else %} users {% endif %})
     </li>
     {% endfor %}
 </ul>
@@ -86,8 +86,8 @@ The most widely used tables and views in your account are:
 <ul>
     {% for (table, user_count, usage_count) in most_users %}
     <li>
-        <code>{{ table }}</code> (used {{ "{:,}".format(usage_count) }} {% if usage_count == 1 -%} time {% else %} times {% endif %}
-        by {{ "{:,}".format(user_count) }} {% if user_count == 1 -%} user {% else %} users {% endif %})
+        <code>{{ table }}</code> (used {{ "{:,.0f}".format(usage_count) }} {% if usage_count == 1 -%} time {% else %} times {% endif %}
+        by {{ "{:,.0f}".format(user_count) }} {% if user_count == 1 -%} user {% else %} users {% endif %})
     </li>
     {% endfor %}
 </ul>""",

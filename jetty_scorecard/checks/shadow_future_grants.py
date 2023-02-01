@@ -108,7 +108,7 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
     <ul>
     {% for (schema, roles) in missing_roles %}
         <li>
-            {{ schema }}
+            <code>{{ schema }}</code>
             <ul>
                 {% for role in roles %}
                     <li>{{ role }}</li>

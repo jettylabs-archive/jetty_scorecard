@@ -19,6 +19,7 @@ Jetty Scorecard runs different checks to evaluate a Snowflake configuration. The
 -   **Least Accessible Objects**: Provide a list of the 10 least accessible objects
 -   **Active Masking Policies**: Check for active masking policies, and make sure those that have been applied are functioning properly
 -   **Active Masking Policies**: Check for active row access policies, and make sure those that have been applied are functioning properly
+-   **Potentially Sensitive Columns**: Check for potentially sensitive columns that are widely accessible by matching column names with a list of terms (such as _email_, and _ip_address_)
 
 ## Developing a new check
 

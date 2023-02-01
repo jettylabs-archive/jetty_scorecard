@@ -74,7 +74,7 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
         """The following are the most accessible objects in your account:
 <ul>
     {% for (object, user_count) in most_accessible|sort(attribute="0")|sort(attribute="1", reverse=true) %}
-    <li><code> {{ object }} </code> (accessible by {{ user_count }} {% if user_count == 1 %}
+    <li><code> {{ object }} </code> (accessible by {{ "{:,.0f}".format(user_count) }} {% if user_count == 1 %}
         user
         {% else %}
         users

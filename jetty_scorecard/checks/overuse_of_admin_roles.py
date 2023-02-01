@@ -74,7 +74,8 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
 
     admin_set = set(account_admins + security_admins)
 
-    num_users = len(env.users)
+    # Get number of non-disabled users
+    num_users = len([x for x in env.users if not x.disabled])
 
     if num_users <= 30 and len(admin_set) <= 3:
         score = 1

@@ -16,6 +16,7 @@ from jetty_scorecard.checks import (
     least_accessible_objects,
     active_masking_policies,
     active_row_access_policies,
+    potentially_sensitive_columns,
 )
 
 
@@ -42,6 +43,7 @@ def register(env: env.SnowflakeEnvironment):
         least_accessible_objects.create(),
         active_masking_policies.create(),
         active_row_access_policies.create(),
+        potentially_sensitive_columns.create(),
     ]
 
     for check in check_list:
