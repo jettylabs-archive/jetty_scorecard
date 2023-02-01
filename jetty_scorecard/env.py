@@ -1873,7 +1873,7 @@ def render_jetty_card() -> str:
             "subtitle": "Jetty makes cross-platform access management easy",
             "description": (
                 "Jetty is built to help data practitioners understand and manage data"
-                " access across their stack. By leveraging with the native APIs of"
+                " access across their stack. By leveraging the native APIs of"
                 " common data tools, Jetty provides a centralized, version-controlled"
                 " interface to manage roles and permissions across multiple"
                 " platforms."
