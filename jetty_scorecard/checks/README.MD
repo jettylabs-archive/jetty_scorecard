@@ -6,8 +6,8 @@ Jetty Scorecard runs different checks to evaluate a Snowflake configuration. The
 
 -   **Network Policy**: Look for an existing network policy
 -   **Shadow Future Grants**: Look for ignored db-level future grants
--   **Backup ACCOUNTADMIN**: Make sure that there is more than one user with the ACCOUNTADMIN role
--   **Too many admins**: Make sure a limited number of users have ACCOUNTADMIN or SECURITYADMIN roles
+-   **Backup Account Admin**: Make sure that there is more than one user with the ACCOUNTADMIN role
+-   **Users with Admin Roles**: Make sure a limited number of users have ACCOUNTADMIN or SECURITYADMIN roles
 -   **Inactive Users**: Highlight users who haven't logged in or accessed data in a while
 -   **Managed Access Schemas**: Look for existing managed access schemas
 -   **Inaccessible Tables and Views**: Look for tables and views that have been permissioned, but are missing database or schema usage permissions
@@ -18,8 +18,9 @@ Jetty Scorecard runs different checks to evaluate a Snowflake configuration. The
 -   **Most Accessible Tables and Views**: Provide a list of the 10 most accessible tables and views
 -   **Least Accessible Tables and Views**: Provide a list of the 10 least accessible tables and views
 -   **Active Masking Policies**: Check for active masking policies, and make sure those that have been applied are functioning properly
--   **Active Masking Policies**: Check for active row access policies, and make sure those that have been applied are functioning properly
+-   **Active Row Access Policies**: Check for active row access policies, and make sure those that have been applied are functioning properly
 -   **Potentially Sensitive Columns**: Check for potentially sensitive columns that are widely accessible by matching column names with a list of terms (such as _email_, and _ip_address_)
+-   **Password-Only Logins**: Check for password-only logins (no MFA, SSO, etc.)
 
 ## Developing a new check
 
