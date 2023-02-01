@@ -61,7 +61,7 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
         str: Details
     """
     if not env.has_data or env.login_history is None:
-        return None, "Unable to object permissions."
+        return None, "Unable to load object permissions."
 
     joined_tables = any_object_privileges_by_role(env)
 

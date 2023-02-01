@@ -61,6 +61,9 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
         float: Score
         str: Details
     """
+    if not env.has_data or env.future_grants is None:
+        return None, "Unable to load future grants."
+
     # Build a map of future grants at the db and schema level
 
     future_grant_map = {}
