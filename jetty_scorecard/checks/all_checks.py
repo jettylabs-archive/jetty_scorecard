@@ -2,10 +2,21 @@ from jetty_scorecard import env
 from jetty_scorecard.checks import (
     backup_account_admin,
     has_network_policy,
+    inaccessible_tables_and_views,
+    least_accessible_tables_and_views,
+    most_accessible_tables_and_views,
     shadow_future_grants,
     overuse_of_admin_roles,
     password_only_login,
     inactive_users,
+    managed_access_schemas,
+    most_used_tables,
+    most_used_columns,
+    least_used_tables,
+    future_grant_coverage,
+    active_masking_policies,
+    active_row_access_policies,
+    potentially_sensitive_columns,
 )
 
 
@@ -22,6 +33,17 @@ def register(env: env.SnowflakeEnvironment):
         has_network_policy.create(),
         password_only_login.create(),
         inactive_users.create(),
+        managed_access_schemas.create(),
+        inaccessible_tables_and_views.create(),
+        most_used_tables.create(),
+        most_used_columns.create(),
+        least_used_tables.create(),
+        future_grant_coverage.create(),
+        most_accessible_tables_and_views.create(),
+        least_accessible_tables_and_views.create(),
+        active_masking_policies.create(),
+        active_row_access_policies.create(),
+        potentially_sensitive_columns.create(),
     ]
 
     for check in check_list:

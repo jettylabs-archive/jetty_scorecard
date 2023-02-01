@@ -1,0 +1,7 @@
+{% macro plural(word, number) -%}
+{%- if number == 1 -%}
+{{word}}
+{%- else -%}
+{{word}}s
+{%- endif %}
+{%- endmacro %}

@@ -1,0 +1,24 @@
+There are {{ admin_set|length }} users in your account with the <code>ACCOUNTADMIN</code> or <code>SECURITYADMIN</code>
+roles:
+<ul>
+    <li>
+        ACCOUNTADMIN
+        <ul>
+            {% for (user) in account_admins|sort %}
+            <li>
+                {{ user }}
+            </li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li>
+        SECURITYADMIN
+        <ul>
+            {% for (user) in security_admins|sort %}
+            <li>
+                {{ user }}
+            </li>
+            {% endfor %}
+        </ul>
+    </li>
+</ul>

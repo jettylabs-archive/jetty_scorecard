@@ -1,0 +1,33 @@
+{% if misapplied_policies|length > 0 %}
+The following policies are applied to the given objects, but have a status other than <code>ACTIVE</code>:
+<ul>
+    {% for (policy, target, status) in misapplied_policies|sort(attribute="1,0") %}
+    <li>
+        <code>{{ policy }}</code> applied to <code> {{ target }}</code>: <strong>{{ status }}</strong>
+    </li>
+    {% endfor %}
+</ul>
+<br>
+{% endif %}
+
+{% if unused_policies|length > 0 %}
+The following policies exist but have not been applied anywhere:
+<ul>
+    {% for policy in unused_policies|sort %}
+    <li>
+        <code>{{ policy }}</code>
+    </li>
+    {% endfor %}
+</ul>
+<br>
+{% endif %}
+{% if active_policies|length > 0 %}
+The following policies are applied to the given objects and have an <code>ACTIVE</code> status:
+<ul>
+    {% for (policy, target) in active_policies|sort(attribute="1,0") %}
+    <li>
+        <code>{{ policy }}</code> applied to <code>{{ target }}</code>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}

@@ -5,6 +5,11 @@
 
 # About Jetty Scorecard
 
+<p align="center">
+  <img src="./etc/scorecard_screenshot.png" alt="jetty scorecard screenshot" width="830" >
+</p>
+<br><br>
+
 It can be hard to keep track of, not to mention follow, data infrastructure best practices - we want to change that!
 
 Jetty Scorecard is living documentation of Snowflake best practices - it outlines recommendations with links to relevant documentation, and does so in the context of your existing environment. This makes it easy to know what you can do right now to improve your security and maintainability.
@@ -74,9 +79,28 @@ To provide peace of mind, it is worth noting that the Jetty Scorecard applicatio
 
 # About Jetty Labs
 
-Jetty Labs is building software to simplify access management across the modern data stack. You can see more about what we're working on at https://www.get-jetty.com.
+Jetty Labs is reinventing access control for the data teams.
 
-<br>
+Our principal offering, Jetty Core, integrates with tools from across the data stack and centralizes access control into a single, version-controlled interface. Jetty Core lets users configure access policies in code using the tools today's data owners know and love, and then deploy those configurations in seconds.
+
+Try it out today with `pip install jetty-core`
+
+### Learn more
+
+-   [Jetty Documentation](https://docs.get-jetty.com?utm_source=scorecard&utm_medium=python&utm_campaign=scorecard")
+-   [Jetty Demo Video (YouTube)](https://bit.ly/jetty-demo)
+-   [Jetty Homepage](https://www.get-jetty.com?utm_source=scorecard&utm_medium=python&utm_campaign=scorecard)
+
+### Get in touch
+
+If any of this looks interesting, we'd love to hear your feedback!! If you'd be willing to chat, shoot us an email at [product@get-jetty.com](mailto:product@get-jetty.com) - if we end up having a conversation, we'd love to send you a gift card to show our appreciation for your time.
+
+# Disclaimer
+
+Jetty Scorecard is designed to be an informative tool to help users understand some of the best practices related to Snowflake account management. It is NOT designed to find every possible vulnerability and misconfiguration. Any configuration decisions, suggested by Jetty Scorecard or not, are ultimately up to each account's database administrators.
+
+#
+
 <p align="center">
 <img src="./etc/logo.svg" alt="jetty scorecard logo" width="50" >
 </p>

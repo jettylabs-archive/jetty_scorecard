@@ -1,0 +1,17 @@
+The following columns may contain sensitive information and are accessible by more than {{ "{:,.0f}".format(threshold)
+}} users:
+<ul>
+    {% for (column, users) in results|sort(attribute="0")%}
+    <li><code>{{ column }}</code> - accessible to at least {{ "{:,.0f}".format(users) }} users</li>
+    {% endfor %}
+</ul>
+
+{% if total_result_count > 50 %}
+<p><em>The above list has been truncated to the first 50 results. A total of {{ total_result_count }} results were
+        found</em></p>
+{% endif %}
+<p>
+    There may be more sensitive columns that Scorecard didn't detect.
+    Try running your own checks that include common column
+    names and relevant organizational context to verify these results.
+</p>

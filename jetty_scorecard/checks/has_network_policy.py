@@ -29,7 +29,7 @@ def create() -> Check:
         [
             (
                 "https://docs.snowflake.com/en/user-guide/network-policies.html",
-                "Snowflake Documentation",
+                "Network Policies (Snowflake Documentation)",
             ),
         ],
         [CustomQuery("SHOW PARAMETERS LIKE 'network_policy' IN ACCOUNT;")],

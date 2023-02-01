@@ -1,0 +1,14 @@
+The future grants for the the schema/asset type combinations below override those at the database level. The listed
+roles have inactive future grants set at the database but no active future grants at the schema level.
+<ul>
+    {% for ((schema, object_type), roles) in missing_roles %}
+    <li>
+        <code>{{ schema }} ({{ object_type }})</code>
+        <ul>
+            {% for role in roles %}
+            <li>{{ role }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>

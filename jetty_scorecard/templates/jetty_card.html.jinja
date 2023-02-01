@@ -6,31 +6,9 @@
                     data-bs-target="#collapse{{ id }}" aria-expanded="false" aria-controls="collapse{{ id }}">
                     <div class="d-flex align-items-center">
                         <div class="col m-3">
-                            {% if status == 1 %}
                             <svg class="bi flex-shrink-0 me-2" width="48" height="48" role="img" aria-label="Info">
-                                <use xlink:href="#info-fill" />
+                                <use xlink:href="#jetty-logo" />
                             </svg>
-                            {% elif status == 2 %}
-                            <svg class="bi flex-shrink-0 me-2" width="48" height="48" role="img" aria-label="Fail">
-                                <use xlink:href="#exclamation-triangle-fill" />
-                            </svg>
-                            {% elif status == 3 %}
-                            <svg class="bi flex-shrink-0 me-2" width="48" height="48" role="img" aria-label="Pass">
-                                <use xlink:href="#check-circle-fill" />
-                            </svg>
-                            {% elif status == 4 %}
-                            <svg class="bi flex-shrink-0 me-2" width="48" height="48" role="img" aria-label="Insight">
-                                <use xlink:href="#insight-symbol" />
-                            </svg>
-                            {% elif status == 6 %}
-                            <svg class="bi flex-shrink-0 me-2" width="48" height="48" role="img" aria-label="Warning">
-                                <use xlink:href="#exclamation-diamond-fill" />
-                            </svg>
-                            {% else %}
-                            <svg class="bi flex-shrink-0 me-2" width="48" height="48" role="img" aria-label="Unknown">
-                                <use xlink:href="#question-diamond-fill" />
-                            </svg>
-                            {% endif %}
                         </div>
                         <div class="col flex-fill">
                             <div class="card-body">
@@ -60,19 +38,6 @@
                             {% for (link, name) in links %}
                             <li>
                                 <a href="{{ link }}">{{ name }}</a>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {% endif %}
-
-                    {% if queries %}
-                    <div>
-                        <h5>Queries Used:</h5>
-                        <ul>
-                            {% for query in queries %}
-                            <li>
-                                <code>{{ query|e }}</code>
                             </li>
                             {% endfor %}
                         </ul>

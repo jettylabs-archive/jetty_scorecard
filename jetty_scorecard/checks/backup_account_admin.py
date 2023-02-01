@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from jetty_scorecard.checks import Check
 from jetty_scorecard.env import SnowflakeEnvironment, RoleGrant, RoleGrantNodeType
-from jetty_scorecard.util import render_string_template
+from jetty_scorecard.util import render_check_template
 import networkx as nx
 
 
@@ -64,17 +64,9 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
     if len(account_admins) > 1:
         return (
             1,
-            render_string_template(
-                """There are {{account_admins|length}} users in your account with the <code>ACCOUNTADMIN</code> role:
-<ul>
-    {% for (user) in account_admins|sort %}
-    <li>
-        {{ user }}
-    </li>
-    {% endfor %}
-</ul>
-""",
-                account_admins=account_admins,
+            render_check_template(
+                "backup_account_admin.html.jinja",
+                {"account_admins": account_admins},
             ),
         )
     else:

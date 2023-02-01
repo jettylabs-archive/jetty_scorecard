@@ -1,0 +1,29 @@
+The following users are unable to access the specified objects because of missing permissions at the schema or database
+level:
+<ul>
+    {% for (role, details) in missing_permissions.items() %}
+    <li>{{role}}
+        <ul>
+            {% for item in details %}
+            <li>
+                <code>{{ item[0] }}</code> - ({% if (not item[1]) and (not item[2]) -%}
+                schema and database level
+                {%- elif not(item[1]) -%}
+                schema level
+                {%- else -%}
+                database level
+                {%- endif %})
+            </li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>
+
+You can grant the nessesary privileges by running
+<code>GRANT USAGE ON { DATABASE | SCHEMA } &lt;db_or_schema_name&gt; TO ROLE &lt;role_name&gt</code>
+
+You also may be able to work around this by using one or more
+<a
+    href="https://docs.snowflake.com/en/user-guide/security-access-control-overview.html#enforcement-model-the-primary-role-and-secondary-roles">secondary
+    roles</a>.

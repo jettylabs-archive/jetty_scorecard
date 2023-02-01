@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from jetty_scorecard.checks import Check
 from jetty_scorecard.env import SnowflakeEnvironment, LoginHistory, User, AccessHistory
-from jetty_scorecard.util import render_string_template
+from jetty_scorecard.util import render_check_template
 
 
 def create() -> Check:
@@ -18,8 +18,8 @@ def create() -> Check:
         "Inactive Users",
         "Check for non-disabled users that haven't used Snowflake in a while",
         (
-            "When a users stops using Snowflake, their account can be dropped or"
-            " disabled. If they are not, those unused accounts represent a possible"
+            "When a user stops using Snowflake, their account can be dropped or"
+            " disabled. If it is not, that unused account represent a possible"
             " point of entry into the system. This check looks for non-disabled users"
             " that haven't logged in for the last 7 days or haven't accessed a table in"
             " the last 90 days (Enterprise edition only).<br><br>Note: This check"
@@ -95,29 +95,8 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
     if no_access is not None and len(no_access) > 0:
         score = 0.25
 
-    details = render_string_template(
-        """{% if no_login|length > 0 %}
-The following users have not logged in in the last 7 days:
-<ul>
-    {% for user in no_login %}
-    <li>{{ user }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% if no_access is not none and no_access|length > 0 %}
-The following users have not accessed a table in the last 90 days:
-<ul>
-    {% for user in no_access %}
-    <li>{{ user }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% if no_login|length > 0 or (no_access is not none and no_access|length > 0) %}
-Consider disabling or dropping the users listed above.
-{% else %}
-All of your non-disabled users have logged in in the last 7 days.
-{% endif %}
-    """,
+    details = render_check_template(
+        "inactive_users.html.jinja",
         {
             "no_access": no_access,
             "no_login": no_login,

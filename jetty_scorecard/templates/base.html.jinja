@@ -56,9 +56,9 @@
             <path
                 d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
         </symbol>
-        <symbol id="lightbulb-fill" fill="#f47124" viewBox="0 0 16 16">
+        <symbol id="insight-symbol" fill="khaki" viewBox="0 0 16 16">
             <path
-                d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5z" />
+                d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z" />
         </symbol>
         <symbol id="question-diamond-fill" fill="gray" viewBox="0 0 16 16">
             <path
@@ -151,7 +151,7 @@
                     </div>
                     <div class="detail-icon-info">
                         <svg class="bi flex-shrink-0 me-2" width="36" height="36" role="img" aria-label="Insights:">
-                            <use xlink:href="#lightbulb-fill" />
+                            <use xlink:href="#insight-symbol" />
                         </svg>
                         <div class="my-2 display-6">{{ insight_count }} insights</div>
                     </div>
@@ -173,6 +173,9 @@
             {% for check in checks %}
             {{ check }}
             {% endfor %}
+            {% if jetty_card %}
+            {{ jetty_card}}
+            {% endif %}
         </div>
     </div>
 

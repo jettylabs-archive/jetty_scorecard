@@ -41,7 +41,8 @@ class SnowflakeEnvironment:
           been granted to what users/roles
         privilege_grants: List of PrivilegeGrant instances describing what
           privileges have been granted to roles. This includes privileges on
-          databases, schemas, and tables
+          databases, schemas, and tables, but not on functions, pipes, and other
+          object types.
         row_access_policies: List of RowAccessPolicy instances. Only available
           on Snowflake Enterprise edition.
         masking_policies: List of MaskingPolicy instances. Only available on
@@ -808,6 +809,7 @@ class SnowflakeEnvironment:
         jinja_env = Environment(loader=PackageLoader("jetty_scorecard"))
         template = jinja_env.get_template("base.html.jinja")
 
+        self.checks.sort(key=lambda x: x.title)
         self.checks.sort(key=checks.score_map)
 
         return template.render(
@@ -820,6 +822,7 @@ class SnowflakeEnvironment:
             fail_count=self.num_fail_checks,
             unknown_count=self.num_unknown_checks,
             checks=[check.html for check in self.checks],
+            jetty_card=render_jetty_card(),
         )
 
 
@@ -964,6 +967,7 @@ class Entity(DataAsset, Queryable):
         self.database = database
         self.schema = schema
         self.owner = owner
+        self.entity_type = entity_type
 
     def fqn(self) -> str:
         """
@@ -1215,6 +1219,9 @@ class RoleGrant(Queryable):
 class PrivilegeGrant(Queryable):
     """Privilege grant metadata from Snowflake
 
+    The way this is collected, it does currently only includes grants on
+    tables, views, databases, and schemas.
+
     Attributes:
         asset: fqn of the asset the privilege is granted (quoted)
         asset_type: type of the asset the privilege is granted
@@ -1277,8 +1284,11 @@ class PrivilegeGrant(Queryable):
         """
         if row["granted_on"] == "ROLE":
             return
+        # FUTURE: Modify this to also work with database roles
+        if row["granted_to"] != "ROLE":
+            return
         else:
-            name = util.quote_fqn(row["name"])
+            name = util.add_missing_quotes_to_fqn(row["name"])
             return cls(
                 name,
                 row["granted_on"],
@@ -1362,7 +1372,7 @@ class FutureGrant(Queryable):
             FQN of the parent asset the future grant is set on.
         """
         name_part = self.target.split(".<")[0]
-        return util.quote_fqn(name_part)
+        return util.add_missing_quotes_to_fqn(name_part)
 
 
 class MaskingPolicy(Queryable):
@@ -1706,7 +1716,10 @@ class MaskingPolicyReference(Queryable):
         """
         if row["POLICY_KIND"] == "MASKING_POLICY":
             target_fqn = util.fqn(
-                row["REF_DATABASE_NAME"], row["REF_SCHEMA_NAME"], row["REF_ENTITY_NAME"]
+                row["REF_DATABASE_NAME"],
+                row["REF_SCHEMA_NAME"],
+                row["REF_ENTITY_NAME"],
+                row["REF_COLUMN_NAME"],
             )
             tag_fqn = (
                 None
@@ -1843,3 +1856,46 @@ def print_query(query: str) -> None:
         None
     """
     print(f"    {TextFormat.ITALIC}{TextFormat.LIGHT_GRAY}{query}{TextFormat.RESET}")
+
+
+def render_jetty_card() -> str:
+    """Render the jetty_card template and return it as a string to be
+    inserted into the base template
+
+    Returns:
+        Jetty card template as a string
+    """
+    jinja_env = Environment(loader=PackageLoader("jetty_scorecard"))
+    template = jinja_env.get_template("jetty_card.html.jinja")
+    return template.render(
+        {
+            "title": "Simplify Access Management with Jetty",
+            "subtitle": "Jetty makes cross-platform access management easy",
+            "description": (
+                "Jetty is built to help data practitioners understand and manage data"
+                " access across their stack. By leveraging the native APIs of"
+                " common data tools, Jetty provides a centralized, version-controlled"
+                " interface to manage roles and permissions across multiple"
+                " platforms."
+            ),
+            "links": [
+                (
+                    "https://docs.get-jetty.com?utm_source=scorecard&utm_medium=python&utm_campaign=scorecard",
+                    "Jetty Documentation",
+                ),
+                ("https://bit.ly/jetty-demo", "Jetty Demo Video (YouTube)"),
+                (
+                    "https://www.get-jetty.com?utm_source=scorecard&utm_medium=python&utm_campaign=scorecard",
+                    "Jetty Homepage",
+                ),
+            ],
+            "details": (
+                "If any of this looks interesting, we'd love to hear"
+                " your feedback!! If you'd be willing to talk, shoot us an email at <a"
+                " href='mailto:product@get-jetty.com'"
+                " target='_blank'>product@get-jetty.com</a> - if we end up having a"
+                " conversation, we'd love to send you a gift card to show our"
+                " appreciation for your time."
+            ),
+        }
+    )

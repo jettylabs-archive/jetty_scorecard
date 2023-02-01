@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from jetty_scorecard.checks import Check
 from jetty_scorecard.env import SnowflakeEnvironment, RoleGrant, RoleGrantNodeType, User
-from jetty_scorecard.util import render_string_template
+from jetty_scorecard.util import render_check_template
 import networkx as nx
 
 
@@ -16,7 +16,7 @@ def create() -> Check:
         Check: The Check instance.
     """
     return Check(
-        "Overuse of Admin Roles",
+        "Users with Admin Roles",
         "Checks the number of users with administrator roles",
         (
             "Only a limited number of users should be granted Snowflake Administrator"
@@ -74,7 +74,8 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
 
     admin_set = set(account_admins + security_admins)
 
-    num_users = len(env.users)
+    # Get number of non-disabled users
+    num_users = len([x for x in env.users if not x.disabled])
 
     if num_users <= 30 and len(admin_set) <= 3:
         score = 1
@@ -87,31 +88,8 @@ def _runner(env: SnowflakeEnvironment) -> tuple[float, str]:
 
     return (
         score,
-        render_string_template(
-            """There are {{ admin_set|length }} users in your account with the <code>ACCOUNTADMIN</code> or <code>SECURITYADMIN</code> roles:
-<ul>
-    <li>
-        ACCOUNTADMIN
-        <ul>
-            {% for (user) in account_admins|sort %}
-            <li>
-                {{ user }}
-            </li>
-            {% endfor %}
-        </ul>
-    </li>
-    <li>
-        SECURITYADMIN
-        <ul>
-            {% for (user) in security_admins|sort %}
-            <li>
-                {{ user }}
-            </li>
-            {% endfor %}
-        </ul>
-    </li>
-</ul>
-""",
+        render_check_template(
+            "overuse_of_admin_roles.html.jinja",
             {
                 "admin_set": admin_set,
                 "account_admins": account_admins,

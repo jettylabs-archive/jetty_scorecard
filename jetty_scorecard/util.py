@@ -4,7 +4,7 @@ from math import ceil
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 from enum import Enum, auto
-from jinja2 import Environment, BaseLoader
+from jinja2 import Environment, BaseLoader, PackageLoader
 
 """The background colors for the grade component of the scorecard"""
 GRADE_COLORS = {
@@ -137,6 +137,22 @@ def quote_fqn(fqn: str) -> str:
     return ".".join([f'"{clean_up_asset_name(x)}"' for x in name_parts])
 
 
+def add_missing_quotes_to_fqn(fqn: str) -> str:
+    """Add quotes to a fully qualified name, but only if necessary
+
+    Takes an optionally quoted FQN and properly quotes it.
+
+    Args:
+        fqn (str): fully qualified name
+
+    Returns:
+        str: quoted fully qualified name
+
+    """
+    name_parts = list(fqn.split("."))
+    return ".".join([f'"{x}"' if not x.startswith('"') else x for x in name_parts])
+
+
 def fqn(*args) -> str:
     """Create a quoted fully qualified name from a list of arguments
 
@@ -240,6 +256,23 @@ def truncated_schema(fqn: str) -> str | None:
         return partial_name
 
 
+def extract_schema(fqn: str) -> str | None:
+    """Extract the schema from a fully qualified name
+
+    Args:
+        fqn (str): fully qualified asset name
+
+    Returns:
+        str | None: schema name or None if no schema was found
+
+    """
+    truncated = truncated_schema(fqn)
+    if truncated is None:
+        return None
+    else:
+        return f""""{truncated.split('"."')[-1]}"""
+
+
 def truncated_database(fqn: str) -> str | None:
     """Truncate a fully qualified name to its database
 
@@ -304,3 +337,21 @@ def render_string_template(template: str, context: any) -> str:
     """
     jinja_template = Environment(loader=BaseLoader()).from_string(template)
     return jinja_template.render(context)
+
+
+def render_check_template(template_name: str, context: any) -> str:
+    """Render a stored template
+
+    Args:
+        template_name (str): the template to render. This should be saved
+          in the `checks/templates` directory
+        contex (any): the context to render the template with
+
+    Returns:
+        str: the rendered template
+
+    """
+    jinja_env = Environment(loader=PackageLoader("jetty_scorecard.checks"))
+    template = jinja_env.get_template(template_name)
+
+    return template.render(context)
