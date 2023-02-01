@@ -45,7 +45,7 @@ def parse_cli_args() -> argparse.Namespace:
         comments, or suggestions!""",
     )
 
-    parser.add_argument("-v", "--version", action="version", version="%(prog)s 0.1.0")
+    parser.add_argument("-v", "--version", action="version", version="%(prog)s 0.1.1")
 
     details_group = parser.add_argument_group(
         "connection information", "basic information for the Snowflake connection"
@@ -73,7 +73,10 @@ but not all queries will run without a warehouse.""",
     details_group.add_argument(
         "-o",
         "--output",
-        help="the location in which to save the scorecard output (should be an html file)",
+        help=(
+            "the location in which to save the scorecard output (should be an html"
+            " file)"
+        ),
     )
     details_group.add_argument(
         "-c",
@@ -85,7 +88,10 @@ but not all queries will run without a warehouse.""",
 
     auth_group = parser.add_argument_group(
         "authentication",
-        "information needed to authenticate with Snowflake\nonly one of the following may be used",
+        (
+            "information needed to authenticate with Snowflake\nonly one of the"
+            " following may be used"
+        ),
     )
 
     mutually_exclusive_auth_group = auth_group.add_mutually_exclusive_group()
@@ -179,7 +185,9 @@ https://docs.snowflake.com/en/user-guide/admin-account-identifier.html.""",
             mandatory=True,
             validate=lambda result: len(result) > 0,
             invalid_message="Input cannot be empty.",
-            long_instruction="\nThis is the name or email address you use to log into Snowflake.",
+            long_instruction=(
+                "\nThis is the name or email address you use to log into Snowflake."
+            ),
         ).execute()
     else:
         credentials["user"] = args.username
@@ -190,7 +198,11 @@ https://docs.snowflake.com/en/user-guide/admin-account-identifier.html.""",
             mandatory=True,
             validate=lambda result: len(result) > 0,
             invalid_message="Input cannot be empty.",
-            long_instruction="\nThis is the role you'd like to use to generate your scorecard. For the most complete view of your environment, use an administrator role such as SECURITYADMIN or ACCOUNTADMIN.",
+            long_instruction=(
+                "\nThis is the role you'd like to use to generate your scorecard. For"
+                " the most complete view of your environment, use an administrator role"
+                " such as SECURITYADMIN or ACCOUNTADMIN."
+            ),
         ).execute()
     else:
         credentials["role"] = args.role
@@ -201,7 +213,12 @@ https://docs.snowflake.com/en/user-guide/admin-account-identifier.html.""",
             mandatory=True,
             validate=lambda result: len(result) > 0,
             invalid_message="Input cannot be empty.",
-            long_instruction="\nThis is the warehouse you would like to use to generate your scorecard. Many of the queries are metadata queries (beginning with the SHOW keyword), so run without a warehouse. Some queries, however, need to read from tables so require a warehouse.",
+            long_instruction=(
+                "\nThis is the warehouse you would like to use to generate your"
+                " scorecard. Many of the queries are metadata queries (beginning with"
+                " the SHOW keyword), so run without a warehouse. Some queries, however,"
+                " need to read from tables so require a warehouse."
+            ),
         ).execute()
     else:
         credentials["warehouse"] = args.warehouse
@@ -221,7 +238,10 @@ https://docs.snowflake.com/en/user-guide/admin-account-identifier.html.""",
                 Choice(value="sso", name="SSO (will open in a browser)"),
                 Choice(
                     value="key",
-                    name="Key Pair (you can read more here: https://docs.snowflake.com/en/user-guide/key-pair-auth.html)",
+                    name=(
+                        "Key Pair (you can read more here:"
+                        " https://docs.snowflake.com/en/user-guide/key-pair-auth.html)"
+                    ),
                 ),
                 Choice(value="password", name="Password"),
                 Choice(value="dummy", name="No Authentication"),
@@ -295,8 +315,10 @@ def prompt_for_output_location(args: argparse.Namespace) -> str:
             mandatory=True,
             validate=lambda result: len(result) > 0,
             invalid_message="Input cannot be empty.",
-            long_instruction="\nThis is the location where the scorecard will be saved. \
-It should be an html file.",
+            long_instruction=(
+                "\nThis is the location where the scorecard will be saved. It should be"
+                " an html file."
+            ),
             default="./jetty_scorecard.html",
         ).execute()
     else:
