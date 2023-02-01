@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="./etc/scorecard_logo.svg" alt="jetty scorecard logo" width="700" >
+  <img src="https://raw.githubusercontent.com/jettylabs/jetty_scorecard/main/etc/scorecard_logo.svg" alt="jetty scorecard logo" width="700" >
 </p>
 <br><br>
 
 # About Jetty Scorecard
 
 <p align="center">
-  <img src="./etc/scorecard_screenshot.png" alt="jetty scorecard screenshot" width="830" >
+  <img src="https://raw.githubusercontent.com/jettylabs/jetty_scorecard/main/etc/scorecard_screenshot.png" alt="jetty scorecard screenshot" width="830" >
 </p>
 <br><br>
 
@@ -102,5 +102,5 @@ Jetty Scorecard is designed to be an informative tool to help users understand s
 #
 
 <p align="center">
-<img src="./etc/logo.svg" alt="jetty scorecard logo" width="50" >
+<img src="https://raw.githubusercontent.com/jettylabs/jetty_scorecard/main/etc/logo.svg" alt="jetty logo" width="50" >
 </p>
