@@ -822,6 +822,7 @@ class SnowflakeEnvironment:
             fail_count=self.num_fail_checks,
             unknown_count=self.num_unknown_checks,
             checks=[check.html for check in self.checks],
+            jetty_card=render_jetty_card(),
         )
 
 
@@ -1855,3 +1856,46 @@ def print_query(query: str) -> None:
         None
     """
     print(f"    {TextFormat.ITALIC}{TextFormat.LIGHT_GRAY}{query}{TextFormat.RESET}")
+
+
+def render_jetty_card() -> str:
+    """Render the jetty_card template and return it as a string to be
+    inserted into the base template
+
+    Returns:
+        Jetty card template as a string
+    """
+    jinja_env = Environment(loader=PackageLoader("jetty_scorecard"))
+    template = jinja_env.get_template("jetty_card.html.jinja")
+    return template.render(
+        {
+            "title": "Simplify Access Management with Jetty",
+            "subtitle": "Jetty makes cross-platform access management easy",
+            "description": (
+                "Jetty is built to help data practitioners understand and manage data"
+                " access across their stack. By leveraging with the native APIs of"
+                " common data tools, Jetty provides a centralized, version-controlled"
+                " interface to manage roles and permissions across multiple"
+                " platforms."
+            ),
+            "links": [
+                (
+                    "https://docs.get-jetty.com?utm_source=scorecard&utm_medium=python&utm_campaign=scorecard",
+                    "Jetty Documentation",
+                ),
+                ("https://bit.ly/jetty-demo", "Jetty Demo Video (YouTube)"),
+                (
+                    "https://www.get-jetty.com?utm_source=scorecard&utm_medium=python&utm_campaign=scorecard",
+                    "Jetty Homepage",
+                ),
+            ],
+            "details": (
+                "If any of this looks interesting, we'd love to hear"
+                " your feedback!! If you'd be willing to talk, shoot us an email at <a"
+                " href='mailto:product@get-jetty.com'"
+                " target='_blank'>product@get-jetty.com</a> - if we end up having a"
+                " conversation, we'd love to send you a gift card to show our"
+                " appreciation for your time."
+            ),
+        }
+    )
