@@ -1711,7 +1711,10 @@ class MaskingPolicyReference(Queryable):
         """
         if row["POLICY_KIND"] == "MASKING_POLICY":
             target_fqn = util.fqn(
-                row["REF_DATABASE_NAME"], row["REF_SCHEMA_NAME"], row["REF_ENTITY_NAME"]
+                row["REF_DATABASE_NAME"],
+                row["REF_SCHEMA_NAME"],
+                row["REF_ENTITY_NAME"],
+                row["REF_COLUMN_NAME"],
             )
             tag_fqn = (
                 None
