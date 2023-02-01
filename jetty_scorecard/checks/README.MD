@@ -17,6 +17,8 @@ Jetty Scorecard runs different checks to evaluate a Snowflake configuration. The
 -   **Future Grant Coverage**: Look at the coverage of future grants on existing schemas and databases
 -   **Most Accessible Objects**: Provide a list of the 10 most accessible objects
 -   **Least Accessible Objects**: Provide a list of the 10 least accessible objects
+-   **Active Masking Policies**: Check for active masking policies, and make sure those that have been applied are functioning properly
+-   **Active Masking Policies**: Check for active row access policies, and make sure those that have been applied are functioning properly
 
 ## Developing a new check
 

@@ -14,6 +14,8 @@ from jetty_scorecard.checks import (
     future_grant_coverage,
     most_accessible_objects,
     least_accessible_objects,
+    active_masking_policies,
+    active_row_access_policies,
 )
 
 
@@ -38,6 +40,8 @@ def register(env: env.SnowflakeEnvironment):
         future_grant_coverage.create(),
         most_accessible_objects.create(),
         least_accessible_objects.create(),
+        active_masking_policies.create(),
+        active_row_access_policies.create(),
     ]
 
     for check in check_list:

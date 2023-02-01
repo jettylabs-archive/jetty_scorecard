@@ -17,7 +17,7 @@ def create() -> Check:
     """
     return Check(
         "Future Grant Coverage",
-        "See the future grant coverage across all databases and schemas.",
+        "See the future grant coverage across all databases and schemas",
         (
             "Future grants help simplify access management by making it possible to"
             " define permissions and ownership of future database objects before they"
