@@ -32,7 +32,17 @@ def run():
 
     if len(credentials) > 0:
         env.connect(credentials)
-        env.fetch_environment()
+        # If something goes wrong fetching the environment, we'll still run the checks,
+        # but it will be as if we ran them with -d
+        try:
+            env.fetch_environment()
+        except Exception as e:
+            print(f"Unable to fetch environment: {e}")
+            env = SnowflakeEnvironment(args.concurrency)
+            env.fetch_error = (
+                "Unable to fetch environment; displaying unauthenticated"
+                f" scorecard ({e})"
+            )
 
     if args.dump:
         write_output_file(args.dump, pickle.dumps(env.copy()), "wb")
