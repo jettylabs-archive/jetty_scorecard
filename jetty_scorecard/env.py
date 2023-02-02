@@ -67,6 +67,10 @@ class SnowflakeEnvironment:
           enterprise level or higher
         conn: A SnowflakeConnection used to build out the environment
         checks: A list of checks to be run in the environment
+        fetch_error: A string describing the error that occurred when fetching
+          the environment
+        _role_graph: a graph representing relationships between roles in the
+          environment
     """
 
     databases: list[Database] | None
@@ -89,6 +93,7 @@ class SnowflakeEnvironment:
     conn: SnowflakeConnection | None
     max_workers: int
     checks: list[checks.Check]
+    fetch_error: str | None
     _role_graph: nx.DiGraph
 
     def __init__(self, max_workers):
@@ -113,6 +118,7 @@ class SnowflakeEnvironment:
         self.masking_policy_references = None
         self.row_access_policy_references = None
         self._role_graph = None
+        self.fetch_error = None
 
     def copy(self) -> SnowflakeEnvironment:
         """Copy an existing SnowflakeEnvironment
@@ -823,6 +829,7 @@ class SnowflakeEnvironment:
             unknown_count=self.num_unknown_checks,
             checks=[(check.html, check.status.value) for check in self.checks],
             jetty_card=render_jetty_card(),
+            fetch_error=self.fetch_error,
         )
 
 

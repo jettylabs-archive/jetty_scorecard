@@ -39,6 +39,10 @@ def run():
         except Exception as e:
             print(f"Unable to fetch environment: {e}")
             env = SnowflakeEnvironment(args.concurrency)
+            env.fetch_error = (
+                "Unable to fetch environment; displaying unauthenticated"
+                f" scorecard ({e})"
+            )
 
     if args.dump:
         write_output_file(args.dump, pickle.dumps(env.copy()), "wb")
