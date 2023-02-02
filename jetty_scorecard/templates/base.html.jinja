@@ -41,6 +41,15 @@
         .accordion-button:focus {
             border-color: #f47024;
         }
+
+        a.section-link {
+            text-decoration: inherit;
+            color: inherit;
+        }
+
+        a.section-link:hover {
+            color: #f47024;
+        }
     </style>
 
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
@@ -111,35 +120,43 @@
             <div class="overall-grade" style="background-color: {{ grade_color }};">{{ grade }}</div>
             <div class="row flex-fill px-4 row-cols-1 row-cols-md-2">
                 <div class="col">
+
                     <div class="detail-icon-info">
                         <svg class="bi flex-shrink-0 me-2" width="36" height="36" role="img" aria-label="Fail:">
                             <use xlink:href="#exclamation-triangle-fill" />
                         </svg>
-                        <div class="my-2 display-6">{{ fail_count }} failing {% if fail_count == 1 -%}
-                            check
-                            {%- else -%}
-                            checks
-                            {%- endif %}</div>
+                        <a href="#fail" class="section-link">
+                            <div class="my-2 display-6">{{ fail_count }} failing {% if fail_count == 1 -%}
+                                check
+                                {%- else -%}
+                                checks
+                                {%- endif %}</div>
+                        </a>
                     </div>
                     <div class="detail-icon-info">
                         <svg class="bi flex-shrink-0 me-2" width="36" height="36" role="img" aria-label="Warn:">
                             <use xlink:href="#exclamation-diamond-fill" />
                         </svg>
-                        <div class="my-2 display-6">{{ warn_count }} {% if warn_count == 1 -%}
-                            warning
-                            {%- else -%}
-                            warnings
-                            {%- endif %}</div>
+
+                        <a href="#warn" class="section-link">
+                            <div class="my-2 display-6">{{ warn_count }} {% if warn_count == 1 -%}
+                                warning
+                                {%- else -%}
+                                warnings
+                                {%- endif %}</div>
+                        </a>
                     </div>
                     <div class="detail-icon-info">
                         <svg class="bi flex-shrink-0 me-2" width="36" height="36" role="img" aria-label="Pass:">
                             <use xlink:href="#check-circle-fill" />
                         </svg>
-                        <div class="my-2 display-6">{{ pass_count }} passing {% if pass_count == 1 -%}
-                            check
-                            {%- else -%}
-                            checks
-                            {%- endif %}</div>
+                        <a href="#pass" class="section-link">
+                            <div class="my-2 display-6">{{ pass_count }} passing {% if pass_count == 1 -%}
+                                check
+                                {%- else -%}
+                                checks
+                                {%- endif %}</div>
+                        </a>
                     </div>
                 </div>
                 <div class="col">
@@ -147,33 +164,115 @@
                         <svg class="bi flex-shrink-0 me-2" width="36" height="36" role="img" aria-label="Ideas:">
                             <use xlink:href="#info-fill" />
                         </svg>
-                        <div class="my-2 display-6">{{ idea_count }} ideas</div>
+                        <a href="#info" class="section-link">
+                            <div class="my-2 display-6">{{ idea_count }} ideas</div>
+                        </a>
                     </div>
                     <div class="detail-icon-info">
                         <svg class="bi flex-shrink-0 me-2" width="36" height="36" role="img" aria-label="Insights:">
                             <use xlink:href="#insight-symbol" />
                         </svg>
-                        <div class="my-2 display-6">{{ insight_count }} insights</div>
+                        <a href="#insight" class="section-link">
+                            <div class="my-2 display-6">{{ insight_count }} insights</div>
+                        </a>
                     </div>
                     <div class="detail-icon-info">
                         <svg class="bi flex-shrink-0 me-2" width="36" height="36" role="img" aria-label="Not Run:">
                             <use xlink:href="#question-diamond-fill" />
                         </svg>
-                        <div class="my-2 display-6">{{ unknown_count }} {% if unknown_count == 1 -%}
-                            check
-                            {%- else -%}
-                            checks
-                            {%- endif %} not run</div>
+                        <a href="#unknown" class="section-link">
+                            <div class="my-2 display-6">{{ unknown_count }} {% if unknown_count == 1 -%}
+                                check
+                                {%- else -%}
+                                checks
+                                {%- endif %} not run</div>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row row-cols-1 row-cols-xxl-2 g-4">
-            {% for check in checks %}
-            {{ check }}
+        <div class="row row-cols-1 g-4">
+            <a name="fail"></a>
+            <div class="d-flex">
+                <svg class="bi flex-shrink-0 me-2" width="48" height="48" role="img" aria-label="Fail:">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                </svg>
+                <h1 class="display-6 ps-2">Failing Checks</h1>
+            </div>
+            <hr />
+            {% for check in checks if check[1] == 2 %}
+            {{ check[0] }}
+            {% else %}
+            <p class="text-center lead" style="color: gray;"><em>NONE</em></p>
+            {% endfor %}
+            <a name="warn"></a>
+            <div class="d-flex">
+                <svg class="bi flex-shrink-0 me-2" width="48" height="48" role="img" aria-label="Fail:">
+                    <use xlink:href="#exclamation-diamond-fill" />
+                </svg>
+                <h1 class="display-6 ps-2">Warnings</h1>
+            </div>
+            <hr />
+            {% for check in checks if check[1] == 6 %}
+            {{ check[0] }}
+            {% else %}
+            <p class="text-center lead" style="color: gray;"><em>NONE</em></p>
+            {% endfor %}
+            <a name="pass"></a>
+            <div class="d-flex">
+                <svg class="bi flex-shrink-0 me-2" width="48" height="48" role="img" aria-label="Fail:">
+                    <use xlink:href="#check-circle-fill" />
+                </svg>
+                <h1 class="display-6 ps-2">Passing Checks</h1>
+            </div>
+            <hr />
+            {% for check in checks if check[1] == 3 %}
+            {{ check[0] }}
+            {% else %}
+            <p class="text-center lead" style="color: gray;"><em>NONE</em></p>
+            {% endfor %}
+            <a name="info"></a>
+            <div class="d-flex">
+                <svg class="bi flex-shrink-0 me-2" width="48" height="48" role="img" aria-label="Fail:">
+                    <use xlink:href="#info-fill" />
+                </svg>
+                <h1 class="display-6 ps-2">Ideas</h1>
+            </div>
+            <hr />
+            {% for check in checks if check[1] == 1 %}
+            {{ check[0] }}
+            {% else %}
+            <p class="text-center lead" style="color: gray;"><em>NONE</em></p>
+            {% endfor %}
+            <a name="insight"></a>
+            <div class="d-flex">
+                <svg class="bi flex-shrink-0 me-2" width="48" height="48" role="img" aria-label="Fail:">
+                    <use xlink:href="#insight-symbol" />
+                </svg>
+                <h1 class="display-6 ps-2">Insights</h1>
+            </div>
+            <hr />
+            {% for check in checks if check[1] == 4 %}
+            {{ check[0] }}
+            {% else %}
+            <p class="text-center lead" style="color: gray;"><em>NONE</em></p>
+            {% endfor %}
+            <a name="unknown"></a>
+            <div class="d-flex">
+                <svg class="bi flex-shrink-0 me-2" width="48" height="48" role="img" aria-label="Fail:">
+                    <use xlink:href="#question-diamond-fill" />
+                </svg>
+                <h1 class="display-6 ps-2">Unknown</h1>
+            </div>
+            <hr />
+            {% for check in checks if check[1] == 5 %}
+            {{ check[0] }}
+            {% else %}
+            <p class="text-center lead" style="color: gray;"><em>NONE</em></p>
             {% endfor %}
             {% if jetty_card %}
+            <hr />
             {{ jetty_card}}
             {% endif %}
         </div>

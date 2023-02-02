@@ -821,7 +821,7 @@ class SnowflakeEnvironment:
             insight_count=self.num_insight_checks,
             fail_count=self.num_fail_checks,
             unknown_count=self.num_unknown_checks,
-            checks=[check.html for check in self.checks],
+            checks=[(check.html, check.status.value) for check in self.checks],
             jetty_card=render_jetty_card(),
         )
 
