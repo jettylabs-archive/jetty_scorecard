@@ -1890,7 +1890,7 @@ def render_jetty_card() -> str:
                     "https://docs.get-jetty.com?utm_source=scorecard&utm_medium=python&utm_campaign=scorecard",
                     "Jetty Documentation",
                 ),
-                ("https://bit.ly/jetty-demo", "Jetty Demo Video (YouTube)"),
+                ("https://youtu.be/Xx0D6GCTNdc", "Jetty Demo Video (YouTube)"),
                 (
                     "https://www.get-jetty.com?utm_source=scorecard&utm_medium=python&utm_campaign=scorecard",
                     "Jetty Homepage",
