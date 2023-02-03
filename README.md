@@ -88,7 +88,7 @@ Try it out today with `pip install jetty-core`
 ### Learn more
 
 -   [Jetty Documentation](https://docs.get-jetty.com?utm_source=scorecard&utm_medium=python&utm_campaign=scorecard")
--   [Jetty Demo Video (YouTube)](https://bit.ly/jetty-demo)
+-   [Jetty Demo Video (YouTube)](https://youtu.be/Xx0D6GCTNdc)
 -   [Jetty Homepage](https://www.get-jetty.com?utm_source=scorecard&utm_medium=python&utm_campaign=scorecard)
 
 ### Get in touch
